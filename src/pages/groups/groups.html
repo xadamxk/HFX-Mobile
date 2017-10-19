@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar color="hfBlue">
+    <ion-title>Groups</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="backgroundWithCards">
+  <!-- Private Groups -->
+  <ion-card class="headerCard">
+      <ion-card-content class="headerCardContent">
+        <h2 class="center"><b>Private Groups</b></h2>
+      </ion-card-content>
+  </ion-card>
+  <ion-list>
+      <ion-item *ngFor="let group of privateGroups">
+          <div class="item row">
+              <h1 class="normalWhiteSpace col col-50" text-left>
+                  {{ group.result.name }}
+              </h1>
+              <h2 class="normalWhiteSpace col col-50" text-right> 
+                  <ion-thumbnail item-start>
+                      <img *ngIf="group.result.userbar" class="groupThumbnails" src="{{ pathForUserbarImages(group.result.userbar) }}">
+                  </ion-thumbnail>
+              </h2>
+            </div>
+            <h2 class="normalWhiteSpace">{{ group.result.description }}</h2>
+      </ion-item>
+    </ion-list>
+  <!-- Site Groups -->
+  <ion-card class="headerCard">
+      <ion-card-content class="headerCardContent">
+        <h2 class="center"><b>Site Groups</b></h2>
+      </ion-card-content>
+  </ion-card>
+  <ion-list>
+      <ion-item *ngFor="let group of siteGroups">
+          <div class="item row">
+              <h1 class="normalWhiteSpace col col-50" text-left>
+                  {{ group.result.name }}
+              </h1>
+              <h2 class="normalWhiteSpace col col-50" text-right> 
+                  <ion-thumbnail item-start>
+                      <img *ngIf="group.result.userbar" class="groupThumbnails" src="{{ pathForUserbarImages(group.result.userbar) }}">
+                  </ion-thumbnail>
+              </h2>
+            </div>
+            <h2 class="normalWhiteSpace">{{ group.result.description }}</h2>
+      </ion-item>
+    </ion-list>
+</ion-content>

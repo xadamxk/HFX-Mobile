@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar color="hfBlue">
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list *ngIf="type == 'f'">
+      
+      <ion-item (tap)="launchForumPage(forums)">
+        <ion-thumbnail item-start>
+            <img class="forumThumbnails" src="{{ pathForImages(forums.ficon) }}">
+        </ion-thumbnail>
+        <h2 class="normalWhiteSpace">{{forums.name}}</h2>
+        <p class="normalWhiteSpace"> {{ forums.description }} </p>
+      </ion-item>
+    </ion-list>
+  <ion-list *ngIf="childrenCount > 0">
+      <ion-list-header><h2><b>Forums in {{ pageTitle }}</b></h2></ion-list-header>
+    <ion-item (tap)="launchForumPage(forum)" *ngFor="let forum of children">
+      <ion-thumbnail item-start>
+          <img class="forumThumbnails" src="{{ pathForImages(forum.ficon) }}">
+      </ion-thumbnail>
+      <h2 class="normalWhiteSpace">{{forum.name}}</h2>
+      <p class="normalWhiteSpace"> {{ forum.description }} </p>
+    </ion-item>
+  </ion-list>
+</ion-content>

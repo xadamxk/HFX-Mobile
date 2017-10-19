@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar color="hfBlue">
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-list-header><h2><b>{{ pageTitle }}</b></h2></ion-list-header>
+    <ion-item (tap)="launchForumsPage(forums)" *ngFor="let forums of category">
+      <ion-thumbnail item-start>
+          <img class="forumThumbnails" src="{{ pathForImages(forums.ficon) }}">
+      </ion-thumbnail>
+      <h2 class="normalWhiteSpace">{{forums.name}}</h2>
+      <p class="normalWhiteSpace"> {{ forums.description }} </p>
+    </ion-item>
+  </ion-list>
+</ion-content>

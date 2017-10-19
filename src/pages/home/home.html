@@ -1,17 +1,20 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="hfBlue">
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+<ion-content padding class="darkBackground">
+  <ion-list-header><h1><b>HF Sections</b></h1></ion-list-header>
+  <ion-list>
+    <ion-item *ngFor="let category of categories" (tap)="launchCategoryPage(category)">
+      <h2 >{{category.name}}</h2>
+    </ion-item>
+  </ion-list>
+  <ion-list-header><h1><b>HF Groups</b></h1></ion-list-header>
+  <ion-list>
+    <ion-item (tap)="launchGroupsPage(category)">
+      <h2 >View Groups</h2>
+    </ion-item>
+  </ion-list>
 </ion-content>

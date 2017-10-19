@@ -14,3 +14,46 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+h1, h2, h3, h4, h5, h6 {
+    color: white;
+}
+
+.normalWhiteSpace{
+    white-space: normal;
+}
+
+.forumThumbnails{
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.groupThumbnails{
+    width: 136px !important;
+    height: 42px !important;
+    float: right;
+    position: static;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: center;
+}
+
+.backgroundWithCards{
+    background-color: #474747 !important;
+}
+
+.headerCard{
+    border: 1px solid black !important;
+}
+
+.headerCardContent{
+    padding: 3px 16px !important;
+}
+
+.divider{
+    border-left:1px solid black;
+}

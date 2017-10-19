@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar color="hfBlue">
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="backgroundWithCards">
+  <!-- Sticky Threads -->
+  <ion-card class="headerCard">
+      <ion-card-content class="headerCardContent">
+        <h2 class="center"><b>Important Threads</b></h2>
+      </ion-card-content>
+  </ion-card>
+  <ion-card *ngFor="let thread of stickyThreads">
+    <ion-card-content>
+      <ion-card-title>
+        <b>{{ thread.subject }}</b>
+        </ion-card-title>
+        <div class="item row">
+          <h4 class="normalWhiteSpace col col-50" (tap)="launchProfilePage(thread)" text-left>
+            {{ thread.username}}
+          </h4>
+          <h4 class="normalWhiteSpace col col-50" text-right> 
+            <ion-icon name="chatboxes"></ion-icon>
+            {{ thread.numreplies }} 
+          </h4>
+        </div>
+    </ion-card-content>
+  </ion-card>
+  <!-- Normal Threads -->
+  <ion-card class="headerCard">
+      <ion-card-content class="headerCardContent">
+        <h2 class="center"><b>Normal Threads</b></h2>
+      </ion-card-content>
+  </ion-card>
+  <ion-card *ngFor="let thread of normalThreads">
+    <ion-card-content>
+      <ion-card-title>
+        <b>{{ thread.subject }}</b>
+        </ion-card-title>
+        <div class="item row">
+          <h4 class="normalWhiteSpace col col-50" (tap)="launchProfilePage(thread)" text-left>
+            {{ thread.username}}
+          </h4>
+          <h4 class="normalWhiteSpace col col-50" text-right> 
+            <ion-icon name="chatboxes"></ion-icon>
+            {{ thread.numreplies }} 
+          </h4>
+        </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
