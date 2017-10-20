@@ -281,6 +281,23 @@ export class ApIv1Provider {
       );
     });
   }
+  /**
+   * Gets categories and structures object based on 
+   * @return {Promise<Forum>}
+   */
+  getForumPage(fid: string, page: number) : Promise<Forum> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/forum/'+ fid + '&page='+ page).subscribe(
+        (res) => {
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
   
   /**
    * Gets categories and structures object based on 

@@ -31,7 +31,7 @@ export class ThreadPage {
           this.threadtitle = res.subject;
           this.threadprefix = this.trimHTML(res.threadprefix);
           this.threadprefix = this.trimFirstLastChar(this.threadprefix);
-          this.threadclosed = res.closed ? "Closed" : "";
+          this.threadclosed = res.closed;
         },
         (reject) => {
           console.error(reject);

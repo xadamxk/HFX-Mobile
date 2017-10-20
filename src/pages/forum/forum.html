@@ -17,6 +17,7 @@
       <ion-card-title (tap)="launchThreadPage(thread)">
         <b>{{ thread.subject }}</b>
         </ion-card-title>
+        <div class="prefix" *ngIf="thread.threadprefix"> {{ thread.threadprefix }} </div><div class="closed" *ngIf="thread.closed"> Closed </div>
         <div class="item row">
           <h4 class="normalWhiteSpace col col-50" (tap)="launchProfilePage(thread)" text-left>
             {{ thread.username}}
@@ -39,6 +40,7 @@
       <ion-card-title (tap)="launchThreadPage(thread)">
         <b>{{ thread.subject }}</b>
         </ion-card-title>
+        <div class="prefix" *ngIf="thread.threadprefix"> {{ thread.threadprefix }} </div><div class="closed" *ngIf="thread.closed"> Closed </div>
         <div class="item row">
           <h4 class="normalWhiteSpace col col-50" (tap)="launchProfilePage(thread)" text-left>
             {{ thread.username}}
@@ -50,4 +52,8 @@
         </div>
     </ion-card-content>
   </ion-card>
+  <ion-infinite-scroll *ngIf="loadedthreads < totalthreads" (ionInfinite)="doInfinite($event, fid, loadedthreads)">
+    <div class="center">Pull to load more threads...</div>
+    <ion-infinite-scroll-content loadingSpinner="circles" loadingText="Loading more threads..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
