@@ -14,7 +14,7 @@
   </ion-card>
   <ion-card *ngFor="let thread of stickyThreads">
     <ion-card-content>
-      <ion-card-title>
+      <ion-card-title (tap)="launchThreadPage(thread)">
         <b>{{ thread.subject }}</b>
         </ion-card-title>
         <div class="item row">
@@ -36,7 +36,7 @@
   </ion-card>
   <ion-card *ngFor="let thread of normalThreads">
     <ion-card-content>
-      <ion-card-title>
+      <ion-card-title (tap)="launchThreadPage(thread)">
         <b>{{ thread.subject }}</b>
         </ion-card-title>
         <div class="item row">

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApIv1Provider } from '../../providers/api-v1/api-v1';
 import { ProfilePage } from '../profile/profile';
+import { ThreadPage } from '../thread/thread';
 // https://stackoverflow.com/questions/42305422/using-jquery-with-ionic-2
 
 @IonicPage()
@@ -42,6 +43,10 @@ export class ForumPage {
 
   launchProfilePage(forum){
     this.navCtrl.push(ProfilePage, forum);
+  }
+
+  launchThreadPage(thread){
+    this.navCtrl.push(ThreadPage, thread);
   }
 
   ionViewDidLoad() {

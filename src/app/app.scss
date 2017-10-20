@@ -16,7 +16,7 @@
 // automatically applied to the <body> element in the app.
 
 h1, h2, h3, h4, h5, h6 {
-    color: white;
+    color: color($colors,white);
 }
 
 .normalWhiteSpace{
@@ -43,11 +43,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .backgroundWithCards{
-    background-color: #474747 !important;
+    background-color: color($colors,hfGrayLight) !important;
 }
 
 .headerCard{
-    border: 1px solid black !important;
+    border: 1px solid color($colors,black) !important;
 }
 
 .headerCardContent{
@@ -55,5 +55,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .divider{
-    border-left:1px solid black;
+    border-left:1px solid color($colors,black);
+}
+
+.prefix{
+    color: color($colors,white);
+    background-color: color($colors,hfBlueLight);
+    padding: 3px;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 3px;
+}
+
+.closed{
+    color: color($colors,white);
+    background-color: color($colors,danger);
+    padding: 3px;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 3px;
 }

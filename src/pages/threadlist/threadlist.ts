@@ -20,7 +20,7 @@ export class ThreadlistPage {
       apiv1.getUserThreads(this.navParams.get('uid')).then(
         (res) => {
           //console.log(res);
-          this.threadlist = res.threads;
+          this.threadlist = res;
         },
         (reject) => {
           console.error(reject);

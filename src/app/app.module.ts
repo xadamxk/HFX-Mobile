@@ -16,6 +16,7 @@ import { GroupsPage } from '../pages/groups/groups';
 import { ProfilePage } from '../pages/profile/profile';
 import { SettingsPage } from '../pages/settings/settings';
 import { ThreadlistPage } from '../pages/threadlist/threadlist';
+import { ThreadPage } from '../pages/thread/thread';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -41,7 +42,8 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
     GroupsPage,
     ProfilePage,
     SettingsPage,
-    ThreadlistPage
+    ThreadlistPage,
+    ThreadPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +63,8 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
     GroupsPage,
     ProfilePage,
     SettingsPage,
-    ThreadlistPage
+    ThreadlistPage,
+    ThreadPage
   ],
   providers: [
     StatusBar,

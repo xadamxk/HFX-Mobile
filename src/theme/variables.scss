@@ -43,11 +43,14 @@ $colors: (
   light:      #f4f4f4,
   dark:       #222,
   hfGray:     #333,
+  hfGrayLight:#474747,
   hfBlue:     #072948,
-white:      #fff,
+  hfBlueLight:#0F5799,
   posRep:     #32CD32,
   neutRep:    #CC3333,
-  negRep:     #666666
+  negRep:     #666666,
+  white:      #fff,
+  black:    black
 );
 
 $tabs-tab-color-active: color($colors, light);
@@ -78,7 +81,7 @@ $card-ios-margin-right: 0px;
 $card-md-margin-right: 0px;
 $card-wp-margin-right: 0px;
 
-$card-md-border: black;
+$card-md-border: color($colors, black);
 
 
 // App iOS Variables

@@ -115,6 +115,28 @@ class Threadlist {
   }]
 }
 
+class Thread {
+  subject: string;
+  threadprefix: string;
+  user: number;
+  username: string;
+  fid: number;
+  closed: boolean;
+  numreplies: number;
+  dateline: string;
+  firstpost: number;
+  postdata: [{
+    pid: number;
+    parent: number;
+    subject: string;
+    uid: number;
+    dateline: string;
+    message: string;
+    edituid: number;
+    edittime: string;
+  }]
+}
+
 @Injectable()
 export class ApIv1Provider {
 
@@ -161,7 +183,7 @@ export class ApIv1Provider {
   }
 
   getRequest(url: string) : any {
-    console.log('url: ' + url);
+    console.log('url: ' + this.apiUrl + url);
     return this.http.get(this.apiUrl + url, this.options).map(res => res.json());
   }
 
@@ -304,6 +326,45 @@ export class ApIv1Provider {
     return new Promise((resolve, reject) => {
       this.getRequest('/user/'+uid+'/threads').subscribe(
         (res) => {
+          console.log(res);
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
+
+  /**
+   * Gets user by uid and structures object based on User class for reference.
+   * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
+   */
+  getThread(tid: string) : Promise<Thread> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/thread/'+tid).subscribe(
+        (res) => {
+          console.log(res);
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
+
+  /**
+   * Gets user by uid and structures object based on User class for reference.
+   * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
+   */
+  getThreadRaw(tid: string) : Promise<Thread> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/thread/' + tid + '?raw').subscribe(
+        (res) => {
+          console.log(res);
           if (!res.success){
             reject(res.message);
           }
