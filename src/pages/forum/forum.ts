@@ -4,6 +4,7 @@ import { ApIv1Provider } from '../../providers/api-v1/api-v1';
 import { ProfilePage } from '../profile/profile';
 import { ThreadPage } from '../thread/thread';
 // https://stackoverflow.com/questions/42305422/using-jquery-with-ionic-2
+// Infinite scroll: https://www.djamware.com/post/59b0ac0c80aca768e4d2b139/an-example-of-ionic-3-infinite-scroll-or-load-more
 
 @IonicPage()
 @Component({
@@ -12,12 +13,13 @@ import { ThreadPage } from '../thread/thread';
   providers: [ApIv1Provider]
 })
 export class ForumPage {
+  // Standard Variables
   private pageTitle;
   public forum: any;
   public stickyThreads = [];
   public normalThreads = [];
   public threadCount: any;
-
+  // Infinite Paging Variables
   public page: number;
   public loadedthreads: number;
   public fid: any;
