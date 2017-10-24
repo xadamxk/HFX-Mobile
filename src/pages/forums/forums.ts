@@ -29,6 +29,7 @@ export class ForumsPage {
       },
       (reject) => {
         console.error(reject);
+        apiv1.displayErrorMessage(reject);
       }
     );
   }

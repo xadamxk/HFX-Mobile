@@ -27,6 +27,7 @@ public usertitle: any;
         },
         (reject) => {
           console.error(reject);
+          apiv1.displayErrorMessage(reject);
         }
       );
   }

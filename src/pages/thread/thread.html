@@ -13,4 +13,16 @@
           <div class="prefix" *ngIf="threadprefix"> {{ threadprefix }} </div><div class="closed" *ngIf="threadclosed"> Closed </div>
         </ion-card-content>
     </ion-card>
+    <ion-card *ngFor="let post of posts">
+      <ion-item (tap)="launchProfilePage(post)">
+        <ion-thumbnail item-left>
+          <img class="avatarThumbnails" src="{{ pathForImages(post) }}"/>
+        </ion-thumbnail>
+        <h2 class="normalWhiteSpace"><b>{{ post.username }}</b></h2>
+        <p class="normalWhiteSpace">{{ post.usertitle }}</p>
+      </ion-item>
+      <ion-card-content>
+          <div class="newLineText" [innerHtml]="assembleHTMLItem(post.message)"></div>
+      </ion-card-content>
+    </ion-card>
 </ion-content>

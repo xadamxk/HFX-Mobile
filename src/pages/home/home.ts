@@ -18,11 +18,12 @@ export class HomePage {
     public apiv1: ApIv1Provider) {
     apiv1.getCategories().then(
       (res) => {
-        //console.log(res);
+        console.log(res);
         this.categories = res.children;
       },
       (reject) => {
         console.error(reject);
+        apiv1.displayErrorMessage(reject);
       }
     );
   }

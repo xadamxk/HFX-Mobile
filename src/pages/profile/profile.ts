@@ -26,7 +26,7 @@ export class ProfilePage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public apiv1: ApIv1Provider) {
-      //console.log(this.navParams);
+      console.log(this.navParams);
       apiv1.getUser(this.navParams.get('user')).then(
         (res) => {
           //console.log(res);
@@ -44,6 +44,7 @@ export class ProfilePage {
         },
         (reject) => {
           console.error(reject);
+          apiv1.displayErrorMessage(reject);
         }
       );
   }

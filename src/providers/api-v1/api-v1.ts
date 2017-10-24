@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+
+// Retrieving GET headers: http://strangemilk.com/access-http-response-headers-angularjs/
 
 class User {
   username: string;
@@ -16,6 +19,16 @@ class User {
   regdate: string;
   lastactive: string;
   reputation: number;
+}
+
+class Users {
+  uids: [{
+    uid: number;
+    success: boolean;
+    result: [{
+      User
+    }]
+  }]
 }
 
 class Inbox {
@@ -146,7 +159,9 @@ export class ApIv1Provider {
   public headers: Headers;
   public options: RequestOptions;
 
-  constructor(public http: Http) {
+  constructor(
+    public http: Http, 
+    public alertCtrl: AlertController) {
     //console.log('Hello ApIv1Provider Provider');
     /*
       Typically you'd use a StorageProvider (LocalStorage) to keep the apikey for the user stored on there device for accessing later.
@@ -183,13 +198,38 @@ export class ApIv1Provider {
   }
 
   getRequest(url: string) : any {
-    console.log('url: ' + this.apiUrl + url);
-    return this.http.get(this.apiUrl + url, this.options).map(res => res.json());
+    return this.http.get(this.apiUrl + url, this.options)
+    .map(res => {
+      var jsonObj = res.json();
+      var limitKeyName = "x-rate-limit-remaining";
+      // Append result if not exist
+      if(!jsonObj.result){
+        jsonObj['result'] = [];
+      }
+      // Append keylimit if not exist
+      if(!jsonObj.result[limitKeyName]){
+        jsonObj.result[limitKeyName] = res.headers.toJSON()[limitKeyName];
+      }
+      // For le debugz
+      console.log('URL: ' + this.apiUrl + url + "\n" + 
+      "Remaining Calls: "+jsonObj.result[limitKeyName]);
+      return jsonObj;
+    }); 
   }
 
   postRequest(url: string, data: any) : any {
     console.log('url: ' + url);
-    return this.http.post(this.apiUrl + url, data, this.options).map(res => res.json());
+    return this.http.post(this.apiUrl + url, data, this.options)
+    .map(res => res.json());
+  }
+
+  displayErrorMessage(error){
+    const alert = this.alertCtrl.create({
+      title: 'An Error Occured',
+      subTitle: error,
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 
   /**
@@ -218,11 +258,31 @@ export class ApIv1Provider {
     return new Promise((resolve, reject) => {
       this.getRequest('/user/'+uid).subscribe(
         (res) => {
+          console.log(res);
           if (!res.success){
             reject(res.message);
           }
 
           resolve(res.result);
+        }
+      );
+    });
+  }
+
+   /**
+   * Gets users by uids and structures object based on Users class for reference.
+   * @return {Promise<Users>} Use Users object as reference. Reject is simply a string
+   */
+  getUsers(uids: number[]) : Promise<Users> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/users/'+uids.join()).subscribe(
+        (res) => {
+          console.log(res);
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.uids);
         }
       );
     });
@@ -385,7 +445,6 @@ export class ApIv1Provider {
           if (!res.success){
             reject(res.message);
           }
-
           resolve(res.result);
         }
       );

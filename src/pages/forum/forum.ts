@@ -6,6 +6,13 @@ import { ThreadPage } from '../thread/thread';
 // https://stackoverflow.com/questions/42305422/using-jquery-with-ionic-2
 // Infinite scroll: https://www.djamware.com/post/59b0ac0c80aca768e4d2b139/an-example-of-ionic-3-infinite-scroll-or-load-more
 
+/*
+  DEV NOTES:
+  - TODO: Add thread time in forum list
+  - TODO: Add Last Post info in forum list
+
+*/
+
 @IonicPage()
 @Component({
   selector: 'page-forum',

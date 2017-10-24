@@ -23,6 +23,15 @@ h1, h2, h3, h4, h5, h6 {
     white-space: normal;
 }
 
+.avatarThumbnails{
+    max-width: 120px;
+    max-height: 150px;
+}
+
+.newLineText{
+    white-space: pre-line;
+}
+
 .forumThumbnails{
     width: 40px !important;
     height: 40px !important;

@@ -24,6 +24,7 @@ export class ThreadlistPage {
         },
         (reject) => {
           console.error(reject);
+          apiv1.displayErrorMessage(reject);
         }
       );
   }

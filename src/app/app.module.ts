@@ -28,6 +28,7 @@ import { GetCategoryProvider } from '../providers/get-category/get-category';
 import { GetGroupsProvider } from '../providers/get-groups/get-groups';
 import { ApIv1Provider } from '../providers/api-v1/api-v1';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [

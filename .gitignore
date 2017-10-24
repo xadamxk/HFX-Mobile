@@ -13,7 +13,7 @@ log.txt
 npm-debug.log*
 
 www/
-platforms
+platforms/
 $RECYCLE.BIN/
 
 .DS_Store
