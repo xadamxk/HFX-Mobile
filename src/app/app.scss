@@ -67,6 +67,10 @@ h1, h2, h3, h4, h5, h6 {
     border-left:1px solid color($colors,black);
 }
 
+.messageDivider{
+    //border:1px solid color($colors,black);
+}
+
 .prefix{
     color: color($colors,white);
     background-color: color($colors,hfBlueLight);
@@ -85,4 +89,14 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 4px;
     font-weight: bold;
     margin: 3px;
+}
+
+.postButtons{
+    color: #efefef;
+	background-color: #072948;
+    border: 1px solid #000 !important;
+}
+
+.moreOptions{
+    color: color($colors,white);
 }

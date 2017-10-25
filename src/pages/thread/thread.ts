@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ApIv1Provider } from '../../providers/api-v1/api-v1';
 import { ProfilePage } from '../profile/profile';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActionSheetController } from 'ionic-angular';
 
 
 // Pagination: http://michaelbromley.github.io/ngx-pagination/#/
@@ -29,7 +30,9 @@ export class ThreadPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public apiv1: ApIv1Provider,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer,
+    public actionSheet: ActionSheetController
+  ) {
       //console.log(this.navParams);
       apiv1.getThread(this.navParams.get('tid')).then(
         (res) => {
@@ -156,6 +159,53 @@ export class ThreadPage {
     }
     //console.log(avatar);
     return avatar;
+  }
+
+  presentActionSheet() {
+    let actionSheet = this.actionSheet.create({
+      title: 'Post Actions',
+      buttons: [
+        {
+          text: 'Share Post',
+          role: 'destructive',
+          handler: () => {
+            console.log('Share clicked');
+          }
+        },{
+          text: 'Cite',
+          handler: () => {
+            console.log('Cite clicked');
+          }
+        },{
+          text: 'Posts',
+          handler: () => {
+            console.log('Posts clicked');
+          }
+        },{
+          text: 'Threads',
+          handler: () => {
+            console.log('Threads clicked');
+          }
+        },{
+          text: 'Posts on Thread',
+          handler: () => {
+            console.log('PoT clicked');
+          }
+        },{
+          text: 'Other',
+          handler: () => {
+            console.log('Other clicked');
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 
 }

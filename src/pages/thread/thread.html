@@ -1,8 +1,10 @@
 <ion-header>
   <ion-navbar color="hfBlue">
     <ion-title>{{ pageTitle }}</ion-title>
+    <ion-buttons class="moreOptions" end icon-only ion-button large>
+      <ion-icon name="more"></ion-icon>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -14,15 +16,35 @@
         </ion-card-content>
     </ion-card>
     <ion-card *ngFor="let post of posts">
-      <ion-item (tap)="launchProfilePage(post)">
-        <ion-thumbnail item-left>
+      <ion-item>
+        <ion-thumbnail (tap)="launchProfilePage(post)" item-left>
           <img class="avatarThumbnails" src="{{ pathForImages(post) }}"/>
         </ion-thumbnail>
-        <h2 class="normalWhiteSpace"><b>{{ post.username }}</b></h2>
+        <h2 (tap)="launchProfilePage(post)" class="normalWhiteSpace"><b>{{ post.username }}</b></h2>
         <p class="normalWhiteSpace">{{ post.usertitle }}</p>
+        <button (tap)="presentActionSheet()" class="moreOptions" ion-button item-right clear>
+          <ion-icon name="more"></ion-icon>
+        </button>
       </ion-item>
-      <ion-card-content>
+      <ion-card-content class="messageDivider">
           <div class="newLineText" [innerHtml]="assembleHTMLItem(post.message)"></div>
       </ion-card-content>
+      <ion-row>
+        <ion-col>
+          <button class="postButtons" ion-button icon-left>
+            <ion-icon name="chatbubbles"></ion-icon>
+            <div>PM</div>
+          </button>
+        </ion-col>
+        <ion-col center text-center>
+            <ion-note></ion-note>
+          </ion-col>
+        <ion-col>
+          <button class="postButtons" ion-button icon-left>
+            <ion-icon name="quote"></ion-icon>
+            <div>Quote</div>
+          </button>
+        </ion-col>
+      </ion-row>
     </ion-card>
 </ion-content>
