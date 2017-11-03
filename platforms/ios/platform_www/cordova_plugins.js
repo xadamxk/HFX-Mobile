@@ -40,6 +40,14 @@ module.exports = [
         "clobbers": [
             "QRScanner"
         ]
+    },
+    {
+        "id": "cordova-clipboard.Clipboard",
+        "file": "plugins/cordova-clipboard/www/clipboard.js",
+        "pluginId": "cordova-clipboard",
+        "clobbers": [
+            "cordova.plugins.clipboard"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -51,7 +59,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.3.1",
     "ionic-plugin-keyboard": "2.2.1",
     "cordova-plugin-swift-support": "3.1.1",
-    "cordova-plugin-qrscanner": "2.5.0"
+    "cordova-plugin-qrscanner": "2.5.0",
+    "cordova-clipboard": "1.1.0"
 };
 // BOTTOM OF METADATA
 });

@@ -29,6 +29,7 @@ import { GetGroupsProvider } from '../providers/get-groups/get-groups';
 import { ApIv1Provider } from '../providers/api-v1/api-v1';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Clipboard } from '@ionic-native/clipboard';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     GetCategoryProvider,
     GetGroupsProvider,
     ApIv1Provider,
-    QRScanner
+    QRScanner,
+    Clipboard
   ]
 })
 export class AppModule {}

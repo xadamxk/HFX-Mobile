@@ -10,9 +10,68 @@
 </ion-header>
 
 <ion-content>
-        <ion-thumbnail>
-          <img class="center" src="{{ avatar }}" style="max-width:120px; max-height:150px;">
-      </ion-thumbnail>
-      <h1 class="center"><b> {{ username }} </b></h1>
-      <h4 class="center"> {{ usertitle }} </h4>
+  <ion-thumbnail>
+    <img class="center avatarThumbnails" *ngIf="avatar" src="{{ pathForImages(profile) }}">
+  </ion-thumbnail>
+  <h1 class="center"><b> {{ username }} </b></h1>
+  <h4 class="center"> {{ usertitle }} </h4>
+  <ion-list>
+    <ion-item class="normalWhiteSpace">
+      <div class="item row" style="font-weight:bold;">
+        <div class="normalWhiteSpace col col-50" text-center>
+          <!-- <ion-icon name="calendar"></ion-icon> -->
+          Posts
+        </div>
+        <div (tap)="launchThreadlistPage(profile)" class="normalWhiteSpace col col-50 divider" text-center>
+            Threads
+        </div>
+      </div>
+    </ion-item>
+  <ion-item class="normalWhiteSpace">
+    <div class="item row" style="font-weight:bold;">
+      <div class="normalWhiteSpace col col-50" text-left>
+        <!-- <ion-icon name="star"></ion-icon> -->
+        Reputation:
+      </div>
+      <div class="normalWhiteSpace col col-50" text-left>
+        <div [style.color]="repColor">
+          {{ reputation }}
+        </div>
+      </div>
+    </div>
+  </ion-item>
+  <ion-item class="normalWhiteSpace">
+    <div class="item row" style="font-weight:bold;">
+      <div class="normalWhiteSpace col col-50" text-left>
+        <!-- <ion-icon name="chatboxes"></ion-icon> -->
+        Posts:
+      </div>
+      <div class="normalWhiteSpace col col-50" text-left> 
+          {{ postnum }}
+      </div>
+    </div>
+  </ion-item>
+  <ion-item class="normalWhiteSpace">
+      <div class="item row" style="font-weight:bold;">
+        <div class="normalWhiteSpace col col-50" text-left>
+          <!-- <ion-icon name="calendar"></ion-icon> -->
+          Time Online:
+        </div>
+        <div style="white-space: pre-line;" class="normalWhiteSpace col col-50" text-left>
+            {{ timeonline }}
+        </div>
+      </div>
+    </ion-item>
+    <ion-item class="normalWhiteSpace">
+      <div class="item row" style="font-weight:bold;">
+        <div class="normalWhiteSpace col col-50" text-left>
+          <!-- <ion-icon name="calendar"></ion-icon> -->
+          Last Active:
+        </div>
+        <div style="white-space: pre-line;" class="normalWhiteSpace col col-50" text-left>
+            {{ lastactive }}
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>

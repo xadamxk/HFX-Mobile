@@ -1,8 +1,10 @@
 <ion-header>
   <ion-navbar color="hfBlue">
     <ion-title>{{ pageTitle }}</ion-title>
-    <ion-buttons class="moreOptions" end icon-only ion-button large>
+    <ion-buttons (tap)="presentThreadActionSheet()" right>
+      <button class="moreOptions" end icon-only ion-button large>
       <ion-icon name="more"></ion-icon>
+    </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -22,7 +24,7 @@
         </ion-thumbnail>
         <h2 (tap)="launchProfilePage(post)" class="normalWhiteSpace"><b>{{ post.username }}</b></h2>
         <p class="normalWhiteSpace">{{ post.usertitle }}</p>
-        <button (tap)="presentActionSheet()" class="moreOptions" ion-button item-right clear>
+        <button (tap)="presentPostActionSheet(post)" class="moreOptions" ion-button item-right clear>
           <ion-icon name="more"></ion-icon>
         </button>
       </ion-item>

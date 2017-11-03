@@ -4,6 +4,8 @@ import { ApIv1Provider } from '../../providers/api-v1/api-v1';
 import { ProfilePage } from '../profile/profile';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActionSheetController } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
+import { Clipboard } from '@ionic-native/clipboard';
 
 
 // Pagination: http://michaelbromley.github.io/ngx-pagination/#/
@@ -17,6 +19,9 @@ import { ActionSheetController } from 'ionic-angular';
 export class ThreadPage {
   private pageTitle;
   public thread: any;
+  public threadID: any;
+  public threadAuthor: any;
+  public threadAuthorUID: any;
 
   public threadtitle: any;
   public threadprefix: any;
@@ -26,20 +31,30 @@ export class ThreadPage {
   public uids = [];
   public users: any;
 
+  public threadIDStr = "https://hackforums.net/showthread.php?tid=";
+  public postIDStr = "&pid=";
+  public profileStr = 'https://hackforums.net/member.php?action=profile&uid=';
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public apiv1: ApIv1Provider,
     private sanitizer: DomSanitizer,
-    public actionSheet: ActionSheetController
+    public actionSheet: ActionSheetController,
+    public toastCtrl: ToastController,
+    private clipboard: Clipboard
   ) {
-      //console.log(this.navParams);
-      apiv1.getThread(this.navParams.get('tid')).then(
+    this.threadID = this.navParams.get('tid');
+      console.log(this.navParams);
+      apiv1.getThread(this.threadID).then(
         (res) => {
           this.threadtitle = res.subject;
+          this.pageTitle = this.threadtitle;
           this.threadprefix = this.trimHTML(res.threadprefix);
           this.threadprefix = this.trimFirstLastChar(this.threadprefix);
           this.threadclosed = res.closed;
+          this.threadAuthor = res.username;
+          this.threadAuthorUID = res.user;
           this.posts = res.postdata;
           // UID array
           for(var i in res.postdata){
@@ -116,7 +131,7 @@ export class ThreadPage {
   }
 
   ionViewDidLoad() {
-    this.pageTitle = this.navParams.get('subject');
+    //this.pageTitle = this.navParams.get('subject');
     //console.log('ionViewDidLoad ThreadPage');
   }
 
@@ -161,20 +176,74 @@ export class ThreadPage {
     return avatar;
   }
 
-  presentActionSheet() {
-    let actionSheet = this.actionSheet.create({
-      title: 'Post Actions',
+  presentThreadActionSheet() {
+    let actionSheet1 = this.actionSheet.create({
+      title: 'Thread Actions',
       buttons: [
         {
-          text: 'Share Post',
-          role: 'destructive',
+          text: 'Link',
           handler: () => {
-            console.log('Share clicked');
+            //console.log('Link Thread clicked');
+            var link = this.formTIDLink();
+            console.log(link);
+            this.clipboard.copy(link);
+            this.presentToast('Link copied...');
           }
         },{
           text: 'Cite',
           handler: () => {
-            console.log('Cite clicked');
+            //console.log('Cite Thread clicked');
+            var citation = this.formThreadCitation();
+            console.log(citation);
+            this.clipboard.copy(citation);
+            this.presentToast('Citation copied...');
+          }
+        },{
+          text: 'Other',
+          role: 'destructive',
+          handler: () => {
+            console.log('Other clicked');
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet1.present();
+  }
+
+  presentPostActionSheet(postInfo) {
+    // postInfo contains:
+    //  - message
+    //  - pid
+    //  - subject
+    //  - uid
+    //  - username
+    console.log(postInfo);
+    let actionSheet = this.actionSheet.create({
+      title: 'Post Actions',
+      buttons: [
+        {
+          text: 'Link',
+          handler: () => {
+            //console.log('Link Post clicked');
+            var link = this.formPIDLink(postInfo);
+            //console.log(link);
+            this.clipboard.copy(link);
+            this.presentToast('Link copied...');
+          }
+        },{
+          text: 'Cite',
+          handler: () => {
+            //console.log('Cite clicked');
+            var citation = this.formPostCitation(this.formPIDLink(postInfo), postInfo);
+            //console.log(citation);
+            this.clipboard.copy(citation);
+            this.presentToast('Citation copied...');
           }
         },{
           text: 'Posts',
@@ -193,6 +262,7 @@ export class ThreadPage {
           }
         },{
           text: 'Other',
+          role: 'destructive',
           handler: () => {
             console.log('Other clicked');
           }
@@ -206,6 +276,60 @@ export class ThreadPage {
       ]
     });
     actionSheet.present();
+  }
+
+  presentToast(alertString) {
+    let toast = this.toastCtrl.create({
+      message: alertString,
+      duration: 5000,
+      showCloseButton: true,
+      closeButtonText: 'Dismiss',
+      position: 'top'
+    });
+    toast.present();
+  }
+
+  formTIDLink(){
+    return this.threadIDStr + this.threadID;
+  }
+
+  formPIDLink(postInfo){
+    return this.threadIDStr + this.threadID + this.postIDStr + postInfo.pid;
+  }
+
+  formPostCitation(postLink, postInfo){
+    // User's
+    var str1 = '[url=';
+    var postAuthorLink = this.formAuthorLink(postInfo.uid);
+    var str2 = '][b]';
+    var postAuthorUsername = postInfo.username;
+    var str3 = "'s[/b][/url] ";
+    // Post
+    var str4 = '[url=';
+    var str5 = '][b]Post[/b][/url]';
+
+    return str1 + postAuthorLink + str2 + postAuthorUsername + str3 + str4 + postLink + str5;
+  }
+
+  formThreadCitation(){
+    // Thread
+    var str1 = '[url=';
+    var threadLink = this.formTIDLink();
+    var str2 = '][b]';
+    var threadTitle = this.threadtitle;
+    var str3 = "[/b][/url] ";
+    // Author
+    var str4 = 'by [url=';
+    var postAuthorLink = this.formAuthorLink(this.threadAuthorUID);
+    var str5 = '][b]';
+    var postAuthorUsername = this.threadAuthor;
+    var str6 = "[/b][/url] ";
+
+    return str1 + threadLink + str2 + threadTitle + str3 + str4 + postAuthorLink + str5 + postAuthorUsername + str6;
+  }
+
+  formAuthorLink(uid){
+    return this.profileStr + uid;
   }
 
 }
