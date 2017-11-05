@@ -3,50 +3,81 @@
     <ion-title>{{ pageTitle }}</ion-title>
     <ion-buttons (tap)="presentThreadActionSheet()" right>
       <button class="moreOptions" end icon-only ion-button large>
-      <ion-icon name="more"></ion-icon>
-    </button>
+        <ion-icon name="more"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
+  <!-- -->
+  <ion-slides #pageSlider spaceBetween="3" slidesPerView="5">
+      <ion-slide>
+          <button class="pageButtons" ion-button>
+              <div>Last</div>
+            </button>
+      </ion-slide>
+      <ion-slide *ngFor="let page of pages">
+          <button class="pageButtons" ion-button (tap)="doInfinite(threadID, page)">
+              <div>{{ page }}</div>
+            </button>
+      </ion-slide>
+      <ion-slide>
+          <button class="pageButtons" ion-button>
+              <div>First</div>
+            </button>
+      </ion-slide>
+    </ion-slides>
 </ion-header>
 
 
 <ion-content class="backgroundWithCards">
-    <ion-card class="headerCard">
-        <ion-card-content class="headerCardContent center">
-          <h2><b>{{ threadtitle }}</b></h2>
-          <div class="prefix" *ngIf="threadprefix"> {{ threadprefix }} </div><div class="closed" *ngIf="threadclosed"> Closed </div>
-        </ion-card-content>
-    </ion-card>
-    <ion-card *ngFor="let post of posts">
-      <ion-item>
-        <ion-thumbnail (tap)="launchProfilePage(post)" item-left>
-          <img class="avatarThumbnails" src="{{ pathForImages(post) }}"/>
-        </ion-thumbnail>
-        <h2 (tap)="launchProfilePage(post)" class="normalWhiteSpace"><b>{{ post.username }}</b></h2>
-        <p class="normalWhiteSpace">{{ post.usertitle }}</p>
-        <button (tap)="presentPostActionSheet(post)" class="moreOptions" ion-button item-right clear>
-          <ion-icon name="more"></ion-icon>
+  <!---->
+  <ion-card class="headerCard">
+    <ion-card-content class="headerCardContent center">
+      <h2>
+        <b>{{ threadtitle }}</b>
+      </h2>
+      <h4>Page {{ currentPage }}</h4>
+      <div class="prefix" *ngIf="threadprefix"> {{ threadprefix }} </div>
+      <div class="closed" *ngIf="threadclosed"> Closed </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngFor="let post of posts">
+    <ion-item>
+      <ion-thumbnail (tap)="launchProfilePage(post)" item-left>
+        <img class="avatarThumbnails" src="{{ pathForImages(post) }}" />
+      </ion-thumbnail>
+      <h2 (tap)="launchProfilePage(post)" class="normalWhiteSpace">
+        <b>{{ post.username }}</b>
+      </h2>
+      <p class="normalWhiteSpace">{{ post.usertitle }}</p>
+      <button (tap)="presentPostActionSheet(post)" class="moreOptions" ion-button item-right clear>
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-card-content class="messageDivider">
+      <div class="newLineText" [innerHtml]="assembleHTMLItem(post.message)"></div>
+    </ion-card-content>
+    <ion-row>
+      <ion-col>
+        <button class="postButtons" ion-button icon-left>
+          <ion-icon name="chatbubbles"></ion-icon>
+          <div>PM</div>
         </button>
-      </ion-item>
-      <ion-card-content class="messageDivider">
-          <div class="newLineText" [innerHtml]="assembleHTMLItem(post.message)"></div>
-      </ion-card-content>
-      <ion-row>
-        <ion-col>
-          <button class="postButtons" ion-button icon-left>
-            <ion-icon name="chatbubbles"></ion-icon>
-            <div>PM</div>
-          </button>
-        </ion-col>
-        <ion-col center text-center>
-            <ion-note></ion-note>
-          </ion-col>
-        <ion-col>
-          <button class="postButtons" ion-button icon-left>
-            <ion-icon name="quote"></ion-icon>
-            <div>Quote</div>
-          </button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
+      </ion-col>
+      <ion-col center text-center>
+        <ion-note></ion-note>
+      </ion-col>
+      <ion-col>
+        <button class="postButtons" ion-button icon-left>
+          <ion-icon name="quote"></ion-icon>
+          <div>Quote</div>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <!--
+  <ion-infinite-scroll *ngIf="loadedPosts < numreplies" (ionInfinite)="doInfinite($event, tid, loadedPosts)">
+      <div class="center">Pull to load more threads...</div>
+      <ion-infinite-scroll-content loadingSpinner="circles" loadingText="Loading more posts..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  -->
 </ion-content>

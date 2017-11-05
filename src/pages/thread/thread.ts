@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams} from 'ionic-angular';
 import { ApIv1Provider } from '../../providers/api-v1/api-v1';
 import { ProfilePage } from '../profile/profile';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActionSheetController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Clipboard } from '@ionic-native/clipboard';
+// SHIFT+ALT+F
 
 
 // Pagination: http://michaelbromley.github.io/ngx-pagination/#/
@@ -17,6 +18,8 @@ import { Clipboard } from '@ionic-native/clipboard';
   providers: [ApIv1Provider]
 })
 export class ThreadPage {
+  //
+
   private pageTitle;
   public thread: any;
   public threadID: any;
@@ -26,10 +29,14 @@ export class ThreadPage {
   public threadtitle: any;
   public threadprefix: any;
   public threadclosed: any;
+  public numreplies: any;
 
   public posts: any;
   public uids = [];
   public users: any;
+  public pageCount: number;
+  public currentPage: number;
+  public pages: any;
 
   public threadIDStr = "https://hackforums.net/showthread.php?tid=";
   public postIDStr = "&pid=";
@@ -48,6 +55,7 @@ export class ThreadPage {
       console.log(this.navParams);
       apiv1.getThread(this.threadID).then(
         (res) => {
+          // Variables
           this.threadtitle = res.subject;
           this.pageTitle = this.threadtitle;
           this.threadprefix = this.trimHTML(res.threadprefix);
@@ -55,7 +63,16 @@ export class ThreadPage {
           this.threadclosed = res.closed;
           this.threadAuthor = res.username;
           this.threadAuthorUID = res.user;
+          this.currentPage = 1;
+          this.numreplies = res.numreplies;
+          // Pages
+          this.pageCount = this.createPageCount(this.numreplies); // page count (total/10)
+          this.pages = Array(this.pageCount).fill(this.pageCount).map((x,i)=>i); // array based on count
+          this.pages.splice(0,1); // remove 0 index
+          // Post data
           this.posts = res.postdata;
+
+
           // UID array
           for(var i in res.postdata){
             this.uids.push([res.postdata[i].uid]);
@@ -69,6 +86,43 @@ export class ThreadPage {
           apiv1.displayErrorMessage(reject);
         }
       );
+  }
+
+  doInfinite(tid, page) {
+    this.currentPage = page;
+    this.apiv1.getThreadPage(tid, page).then(
+      (res) => {
+        this.threadtitle = res.subject;
+        this.pageTitle = this.threadtitle;
+        this.threadprefix = this.trimHTML(res.threadprefix);
+        this.threadprefix = this.trimFirstLastChar(this.threadprefix);
+        this.threadclosed = res.closed;
+        this.threadAuthor = res.username;
+        this.threadAuthorUID = res.user;
+        this.numreplies = res.numreplies;
+        this.posts = res.postdata;
+        // UID array
+        for(var i in res.postdata){
+          this.uids.push([res.postdata[i].uid]);
+        }
+        // Inject UIDS properties into posts object
+        this.getUIDSResponse(this.apiv1, res.postdata, this.uids);
+        
+      },
+      (reject) => {
+        console.error(reject);
+        this.apiv1.displayErrorMessage(reject);
+      }
+    );
+
+    console.log('Page ' + page + ' loaded.');
+  }
+
+  createPageCount(numreplies){
+    var pageCount = 0;
+    pageCount = Math.ceil(parseInt(numreplies) / 10) + 1;
+    console.log("Num Pages: "+ pageCount);
+    return pageCount;
   }
 
   injectUIDSProperties(posts, users){
@@ -281,7 +335,7 @@ export class ThreadPage {
   presentToast(alertString) {
     let toast = this.toastCtrl.create({
       message: alertString,
-      duration: 5000,
+      duration: 3000,
       showCloseButton: true,
       closeButtonText: 'Dismiss',
       position: 'top'
@@ -331,5 +385,6 @@ export class ThreadPage {
   formAuthorLink(uid){
     return this.profileStr + uid;
   }
+
 
 }

@@ -93,6 +93,7 @@ export class ForumPage {
            },
            (reject) => {
             console.error(reject);
+            this.apiv1.displayErrorMessage(reject);
           }
         );
   

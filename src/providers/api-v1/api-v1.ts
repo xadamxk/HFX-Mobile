@@ -415,7 +415,7 @@ export class ApIv1Provider {
   }
 
   /**
-   * Gets user by uid and structures object based on User class for reference.
+   * Gets thread by tid and structures object based on User class for reference.
    * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
    */
   getThread(tid: string) : Promise<Thread> {
@@ -432,9 +432,27 @@ export class ApIv1Provider {
       );
     });
   }
+    /**
+   * Gets thread by tid and structures object based on User class for reference.
+   * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
+   */
+  getThreadPage(tid: string, page: number) : Promise<Thread> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/thread/'+tid + '&page=' + page).subscribe(
+        (res) => {
+          console.log(res);
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
 
   /**
-   * Gets user by uid and structures object based on User class for reference.
+   * Gets thread by tid and structures object based on User class for reference.
    * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
    */
   getThreadRaw(tid: string) : Promise<Thread> {
