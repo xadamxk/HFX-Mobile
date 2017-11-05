@@ -406,7 +406,12 @@ export class ThreadPage {
     var example = new Date(input);
     console.log("date time: "+example);
     var date = example.toDateString();
-    var time = example.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    var timeOptions = {
+      timeZone: 'UTC',
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+    var time = example.toLocaleString('en-US', timeOptions);
     var finalFormat = date + ', ' + time;
     return  finalFormat;
   }
@@ -416,6 +421,19 @@ export class ThreadPage {
     var currentPageVal = (this.currentPage - 1) * 10;
     var currentPostVal = parseInt(post) + 1;
     return  currentPageVal + currentPostVal;
+  }
+
+  //
+  determineRepColor(reputation){
+    var tempColor;
+    if(reputation > 0){
+      tempColor = "#32CD32";
+    } else if(reputation == 0){
+      tempColor = "#666666";
+    } else if(reputation < 0){
+      tempColor = "#CC3333";
+    }
+    return tempColor;
   }
 
   private scrollToElement(elementId){
@@ -440,7 +458,7 @@ export class ThreadPage {
   public slideChanged(): void {
       let currentIndex = this.slides.getActiveIndex();
       this.showLeftButton = currentIndex !== 0;
-      this.showRightButton = currentIndex !== Math.ceil(this.slides.length() / 3);
+      this.showRightButton = currentIndex !== this.pageCount;
   }
 
   // Method that shows the next slide

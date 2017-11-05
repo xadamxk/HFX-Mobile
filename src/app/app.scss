@@ -142,3 +142,26 @@ h1, h2, h3, h4, h5, h6 {
     background-color: color($colors, hfBlue);
     border-bottom: 2px solid color($colors, black);
 }
+
+blockquote{
+    cite{
+        span{
+            float: right;
+        }
+        border-radius: 5px;
+        border: 1px solid black;
+        padding: 1px 4px;
+        background-color: color($colors,quoteGreen);
+        color: rgb(17, 17, 17);
+        font-weight: bold;
+        font-style: normal;
+        display: block;
+    }
+    border: 1px solid color($colors,black);
+    padding: 2px 8px;
+    background-color: color($colors,quoteOlive);
+    color: color($colors,black);
+    border-radius: 5px;
+    -webkit-margin-start: 2px;
+    -webkit-margin-end: 2px;
+}

@@ -43,10 +43,10 @@
   <!---->
   <ion-card class="headerCard">
     <ion-card-content class="headerCardContent center">
-      <h2>
+      <h1>
         <b>{{ threadtitle }}</b>
-      </h2>
-      <h4>Page {{ currentPage }}</h4>
+      </h1>
+      <h3>Page {{ currentPage }}</h3>
       <div class="prefix" *ngIf="threadprefix"> {{ threadprefix }} </div>
       <div class="closed" *ngIf="threadclosed"> Closed </div>
     </ion-card-content>
@@ -60,6 +60,9 @@
       <ion-thumbnail (tap)="launchProfilePage(post)" item-left>
         <img class="avatarThumbnails" src="{{ pathForImages(post) }}" />
       </ion-thumbnail>
+      <h2 class="normalWhiteSpace" style="float:right;" [style.color]="determineRepColor(post.reputation)">
+        <b>{{post.reputation}}</b>
+      </h2>
       <h2 (tap)="launchProfilePage(post)" class="normalWhiteSpace">
         <b>{{ post.username }}</b>
       </h2>

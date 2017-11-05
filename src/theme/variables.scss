@@ -49,8 +49,11 @@ $colors: (
   posRep:     #32CD32,
   neutRep:    #CC3333,
   negRep:     #666666,
-  white:      #fff,
-  black:    black
+  white:    #fff,
+  black:    black,
+  quoteGreen: #B1D8BF,
+  quoteRed:   #CC3636,
+  quoteOlive: #ADB1A1
 );
 
 $tabs-tab-color-active: color($colors, light);
