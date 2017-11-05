@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 import { ApIv1Provider } from '../../providers/api-v1/api-v1';
 import { ProfilePage } from '../profile/profile';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActionSheetController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Clipboard } from '@ionic-native/clipboard';
-// SHIFT+ALT+F
-import { Injector, ViewChild } from '@angular/core';
+// Pagination
+import { ViewChild } from '@angular/core';
 import { Slides } from 'ionic-angular';
 
 
@@ -22,6 +22,7 @@ import { Slides } from 'ionic-angular';
 export class ThreadPage {
   //
   @ViewChild(Slides) slides: Slides;
+  @ViewChild(Content) content: Content;
   public showLeftButton: boolean;
   public showRightButton: boolean;
   public selectedCategory: number;
@@ -32,6 +33,7 @@ export class ThreadPage {
   public threadID: any;
   public threadAuthor: any;
   public threadAuthorUID: any;
+  public dateline: any;
 
   public threadtitle: any;
   public threadprefix: any;
@@ -56,9 +58,7 @@ export class ThreadPage {
     private sanitizer: DomSanitizer,
     public actionSheet: ActionSheetController,
     public toastCtrl: ToastController,
-    private clipboard: Clipboard,
-    //
-    public injector: Injector
+    private clipboard: Clipboard
   ) {
     this.threadID = this.navParams.get('tid');
       console.log(this.navParams);
@@ -72,11 +72,12 @@ export class ThreadPage {
           this.threadclosed = res.closed;
           this.threadAuthor = res.username;
           this.threadAuthorUID = res.user;
+          this.dateline = this.formatDate(res.dateline);
           this.currentPage = 1;
           this.numreplies = res.numreplies;
           // Pages
           this.pageCount = this.createPageCount(this.numreplies); // page count (total/10)
-          this.pages = Array(this.pageCount).fill(this.pageCount).map((x,i)=>i); // array based on count
+          this.pages = Array(this.pageCount+1).fill(this.pageCount + 1).map((x,i)=>i); // array based on count
           this.pages.splice(0,1); // remove 0 index
           this.initializeCategories();
           // Post data
@@ -99,7 +100,11 @@ export class ThreadPage {
   }
 
   doInfinite(tid, page) {
+    //
     this.currentPage = page;
+    // Reset prev info
+    this.uids = [];
+    //
     this.apiv1.getThreadPage(tid, page).then(
       (res) => {
         this.threadtitle = res.subject;
@@ -130,8 +135,8 @@ export class ThreadPage {
 
   createPageCount(numreplies){
     var pageCount = 0;
-    pageCount = Math.ceil(parseInt(numreplies) / 10) + 1;
-    console.log("Num Pages: "+ pageCount);
+    pageCount = Math.floor(parseInt(numreplies) / 10) + 1;
+    //console.log("Num Pages: "+ pageCount);
     return pageCount;
   }
 
@@ -397,6 +402,29 @@ export class ThreadPage {
   }
 
   //
+  private formatDate(input){
+    var example = new Date(input);
+    console.log("date time: "+example);
+    var date = example.toDateString();
+    var time = example.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    var finalFormat = date + ', ' + time;
+    return  finalFormat;
+  }
+
+  // calculate post number
+  public calcPostNum(post){ 
+    var currentPageVal = (this.currentPage - 1) * 10;
+    var currentPostVal = parseInt(post) + 1;
+    return  currentPageVal + currentPostVal;
+  }
+
+  private scrollToElement(elementId){
+    let yOffset = document.getElementById(elementId).offsetTop;
+    this.content.scrollTo(0, yOffset, 500)
+    }
+
+
+  // Below is pagination
   private initializeCategories(): void {
     this.categories = this.pages;
       // Select it by defaut
@@ -404,11 +432,8 @@ export class ThreadPage {
 
       // Check which arrows should be shown
       this.showLeftButton = false;
-      console.log("page count: " + this.categories.length);
+      //console.log("page count: " + this.categories.length);
       this.showRightButton = this.categories.length > 3;
-  }
-  public filterData(categoryId: number): void {
-    // Handle what to do when a category is selected
   }
 
   // Method executed when the slides are changed
@@ -430,6 +455,14 @@ export class ThreadPage {
       this.slides.slidePrev();
       this.slides.slidePrev();
       this.slides.slidePrev();
+  }
+
+  public rightPageHold(){
+    this.slides.slideTo(this.pageCount);
+  }
+
+  public leftPageHold(){
+    this.slides.slideTo(0);
   }
 
 }

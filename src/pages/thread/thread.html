@@ -7,59 +7,35 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-  
-  <!--<ion-toolbar style="background-color:#333;">-->
-    <ion-row class="filters segmentPager">
-      <ion-col class="col-with-arrow" (click)="slidePrev()" no-padding col-1>
-        <ion-icon *ngIf="showLeftButton" name="arrow-back"></ion-icon>
-      </ion-col>
-      <ion-col no-padding col-10 >
-        <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="3">
+
+  <ion-row class="filters segmentPager" >
+    <!-- Prev Page -->
+    <ion-col class="col-with-arrow leftrightBorder" (tap)="slidePrev()" ion-long-press [interval]="500" 
+    (onPressing)="leftPageHold()"  no-padding col-1>
+      <ion-icon *ngIf="showLeftButton" name="arrow-back"></ion-icon>
+    </ion-col>
+    <ion-col no-padding col-10>
+        <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="3" autoHeight>
           <!-- Last Page -->
-          <ion-slide (tap)="doInfinite(threadID, pageCount)">
-              <p>Last</p>
-            </ion-slide>
+          <ion-slide (tap)="doInfinite(threadID, pageCount)" class="leftrightBorder">
+            <p>Last</p>
+          </ion-slide>
           <!-- Thread Pages -->
-          <ion-slide (tap)="doInfinite(threadID, page)" *ngFor="let page of pages">
+          <ion-slide (tap)="doInfinite(threadID, page)" *ngFor="let page of pages" class="leftrightBorder">
             <p>{{ page }}</p>
           </ion-slide>
           <!-- First Page -->
-          <ion-slide (tap)="doInfinite(threadID, 1)">
-              <p>First</p>
-            </ion-slide>
+          <ion-slide (tap)="doInfinite(threadID, 1)" class="leftrightBorder">
+            <p>First</p>
+          </ion-slide>
         </ion-slides>
-      </ion-col>
-      <ion-col class="col-with-arrow" (click)="slideNext()" no-padding col-1>
-        <ion-icon *ngIf="showRightButton" name="arrow-forward"></ion-icon>
-      </ion-col>
-    </ion-row>
-  <!--</ion-toolbar>-->
-  <!--
-  <ion-scroll scrollX="true" style="height:50px;">
-      <ion-segment class="scroll-item" *ngFor="let page of pages">
-          <ion-segment-button (tap)="doInfinite(threadID, page)" value="page">{{page}}</ion-segment-button>
-      </ion-segment>
-    </ion-scroll>
-  -->
-  <!-- 
-  <ion-slides #pageSlider spaceBetween="3" slidesPerView="5">
-      <ion-slide>
-          <button class="pageButtons" ion-button>
-              <div>Last</div>
-            </button>
-      </ion-slide>
-      <ion-slide *ngFor="let page of pages">
-          <button class="pageButtons" ion-button (tap)="doInfinite(threadID, page)">
-              <div>{{ page }}</div>
-            </button>
-      </ion-slide>
-      <ion-slide>
-          <button class="pageButtons" ion-button>
-              <div>First</div>
-            </button>
-      </ion-slide>
-    </ion-slides>
-    -->
+    </ion-col>
+    <!-- Next Page -->
+    <ion-col class="col-with-arrow leftrightBorder" (tap)="slideNext()" ion-long-press [interval]="500" 
+    (onPressing)="rightPageHold()" no-padding col-1>
+      <ion-icon *ngIf="showRightButton" name="arrow-forward"></ion-icon>
+    </ion-col>
+  </ion-row>
 </ion-header>
 
 
@@ -75,7 +51,11 @@
       <div class="closed" *ngIf="threadclosed"> Closed </div>
     </ion-card-content>
   </ion-card>
-  <ion-card *ngFor="let post of posts">
+  <ion-card *ngFor="let post of posts; let i = index">
+    <ion-row style="border-bottom:1px solid black;">
+      <ion-col text-left>{{dateline}}</ion-col>
+      <ion-col text-right>Post #{{calcPostNum(i)}}</ion-col>
+    </ion-row>
     <ion-item>
       <ion-thumbnail (tap)="launchProfilePage(post)" item-left>
         <img class="avatarThumbnails" src="{{ pathForImages(post) }}" />
@@ -110,3 +90,11 @@
     </ion-row>
   </ion-card>
 </ion-content>
+
+<ion-footer>
+    <ion-fab right bottom>
+        <button ion-fab mini class="postButtons">
+          <ion-icon name="arrow-dropdown"></ion-icon>
+        </button>
+      </ion-fab>
+  </ion-footer>

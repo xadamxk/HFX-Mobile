@@ -5,6 +5,7 @@ import { AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 // Retrieving GET headers: http://strangemilk.com/access-http-response-headers-angularjs/
+// Autoformat: SHIFT+ALT+F
 
 class User {
   username: string;

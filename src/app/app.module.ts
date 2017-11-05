@@ -30,6 +30,7 @@ import { ApIv1Provider } from '../providers/api-v1/api-v1';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Clipboard } from '@ionic-native/clipboard';
+import { LongPressModule } from 'ionic-long-press'; // https://www.npmjs.com/package/ionic-long-press
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { Clipboard } from '@ionic-native/clipboard';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpModule
+    HttpModule,
+    LongPressModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
