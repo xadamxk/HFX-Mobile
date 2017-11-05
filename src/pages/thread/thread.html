@@ -7,7 +7,41 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-  <!-- -->
+  
+  <!--<ion-toolbar style="background-color:#333;">-->
+    <ion-row class="filters segmentPager">
+      <ion-col class="col-with-arrow" (click)="slidePrev()" no-padding col-1>
+        <ion-icon *ngIf="showLeftButton" name="arrow-back"></ion-icon>
+      </ion-col>
+      <ion-col no-padding col-10 >
+        <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="3">
+          <!-- Last Page -->
+          <ion-slide (tap)="doInfinite(threadID, pageCount)">
+              <p>Last</p>
+            </ion-slide>
+          <!-- Thread Pages -->
+          <ion-slide (tap)="doInfinite(threadID, page)" *ngFor="let page of pages">
+            <p>{{ page }}</p>
+          </ion-slide>
+          <!-- First Page -->
+          <ion-slide (tap)="doInfinite(threadID, 1)">
+              <p>First</p>
+            </ion-slide>
+        </ion-slides>
+      </ion-col>
+      <ion-col class="col-with-arrow" (click)="slideNext()" no-padding col-1>
+        <ion-icon *ngIf="showRightButton" name="arrow-forward"></ion-icon>
+      </ion-col>
+    </ion-row>
+  <!--</ion-toolbar>-->
+  <!--
+  <ion-scroll scrollX="true" style="height:50px;">
+      <ion-segment class="scroll-item" *ngFor="let page of pages">
+          <ion-segment-button (tap)="doInfinite(threadID, page)" value="page">{{page}}</ion-segment-button>
+      </ion-segment>
+    </ion-scroll>
+  -->
+  <!-- 
   <ion-slides #pageSlider spaceBetween="3" slidesPerView="5">
       <ion-slide>
           <button class="pageButtons" ion-button>
@@ -25,6 +59,7 @@
             </button>
       </ion-slide>
     </ion-slides>
+    -->
 </ion-header>
 
 
@@ -74,10 +109,4 @@
       </ion-col>
     </ion-row>
   </ion-card>
-  <!--
-  <ion-infinite-scroll *ngIf="loadedPosts < numreplies" (ionInfinite)="doInfinite($event, tid, loadedPosts)">
-      <div class="center">Pull to load more threads...</div>
-      <ion-infinite-scroll-content loadingSpinner="circles" loadingText="Loading more posts..."></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-  -->
 </ion-content>

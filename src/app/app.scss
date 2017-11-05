@@ -106,3 +106,59 @@ h1, h2, h3, h4, h5, h6 {
 .moreOptions{
     color: color($colors,white);
 }
+/*
+.scroll-item {
+display: inline-block;
+}
+
+ion-scroll[scrollX] {
+white-space: nowrap;
+}
+
+ion-toolbar.scrollable-segments {
+    ion-segment {
+        display: block;
+        overflow-x: scroll;
+        white-space: nowrap;
+
+        ion-segment-button.segment-button {
+        display: inline-block;
+        width: 50px;
+        }
+    }
+}
+*/
+.filters {
+    ion-col {
+        text-align: center;
+        font-size: 1.6rem;
+        line-height: 1.6rem;
+
+        ion-icon {
+            color: #ccc;
+        }
+
+        &.col-with-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    p {
+        color: #fff;
+        margin: 0;
+        font-size: 1.6rem;
+        line-height: 1.6rem;
+    }
+
+    .selected {
+        font-weight: 700;
+    }
+}
+
+.segmentPager{
+    height: 50px;
+    border-bottom: solid color($colors, black);
+    background-color: color($colors, hfGray) !important;
+}

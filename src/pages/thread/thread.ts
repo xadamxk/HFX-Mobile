@@ -7,6 +7,8 @@ import { ActionSheetController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Clipboard } from '@ionic-native/clipboard';
 // SHIFT+ALT+F
+import { Injector, ViewChild } from '@angular/core';
+import { Slides } from 'ionic-angular';
 
 
 // Pagination: http://michaelbromley.github.io/ngx-pagination/#/
@@ -19,6 +21,11 @@ import { Clipboard } from '@ionic-native/clipboard';
 })
 export class ThreadPage {
   //
+  @ViewChild(Slides) slides: Slides;
+  public showLeftButton: boolean;
+  public showRightButton: boolean;
+  public selectedCategory: number;
+  public categories: Array<number>;
 
   private pageTitle;
   public thread: any;
@@ -49,7 +56,9 @@ export class ThreadPage {
     private sanitizer: DomSanitizer,
     public actionSheet: ActionSheetController,
     public toastCtrl: ToastController,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    //
+    public injector: Injector
   ) {
     this.threadID = this.navParams.get('tid');
       console.log(this.navParams);
@@ -69,6 +78,7 @@ export class ThreadPage {
           this.pageCount = this.createPageCount(this.numreplies); // page count (total/10)
           this.pages = Array(this.pageCount).fill(this.pageCount).map((x,i)=>i); // array based on count
           this.pages.splice(0,1); // remove 0 index
+          this.initializeCategories();
           // Post data
           this.posts = res.postdata;
 
@@ -386,5 +396,40 @@ export class ThreadPage {
     return this.profileStr + uid;
   }
 
+  //
+  private initializeCategories(): void {
+    this.categories = this.pages;
+      // Select it by defaut
+      this.selectedCategory = this.categories[0];
+
+      // Check which arrows should be shown
+      this.showLeftButton = false;
+      console.log("page count: " + this.categories.length);
+      this.showRightButton = this.categories.length > 3;
+  }
+  public filterData(categoryId: number): void {
+    // Handle what to do when a category is selected
+  }
+
+  // Method executed when the slides are changed
+  public slideChanged(): void {
+      let currentIndex = this.slides.getActiveIndex();
+      this.showLeftButton = currentIndex !== 0;
+      this.showRightButton = currentIndex !== Math.ceil(this.slides.length() / 3);
+  }
+
+  // Method that shows the next slide
+  public slideNext(): void {
+      this.slides.slideNext();
+      this.slides.slideNext();
+      this.slides.slideNext();
+  }
+
+  // Method that shows the previous slide
+  public slidePrev(): void {
+      this.slides.slidePrev();
+      this.slides.slidePrev();
+      this.slides.slidePrev();
+  }
 
 }
