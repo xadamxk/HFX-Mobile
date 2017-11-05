@@ -22,7 +22,8 @@
           </ion-slide>
           <!-- Thread Pages -->
           <ion-slide (tap)="doInfinite(threadID, page)" *ngFor="let page of pages" class="leftrightBorder">
-            <p>{{ page }}</p>
+            <p *ngIf="page !== currentPage" >{{ page }}</p>
+            <p *ngIf="page == currentPage" class="selectedPage">{{ page }}</p>
           </ion-slide>
           <!-- First Page -->
           <ion-slide (tap)="doInfinite(threadID, 1)" class="leftrightBorder">
@@ -53,7 +54,7 @@
   </ion-card>
   <ion-card *ngFor="let post of posts; let i = index">
     <ion-row style="border-bottom:1px solid black;">
-      <ion-col text-left>{{dateline}}</ion-col>
+      <ion-col text-left>{{formatDate(post.dateline)}}</ion-col>
       <ion-col text-right>Post #{{calcPostNum(i)}}</ion-col>
     </ion-row>
     <ion-item>
@@ -96,8 +97,8 @@
 
 <ion-footer>
     <ion-fab right bottom>
-        <button ion-fab mini class="postButtons">
-          <ion-icon name="arrow-dropdown"></ion-icon>
+        <button (tap)="doNextPage(threadID, currentPage)" ion-fab mini class="postButtons">
+          <ion-icon name="arrow-dropright"></ion-icon>
         </button>
       </ion-fab>
   </ion-footer>

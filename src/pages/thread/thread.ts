@@ -72,7 +72,7 @@ export class ThreadPage {
           this.threadclosed = res.closed;
           this.threadAuthor = res.username;
           this.threadAuthorUID = res.user;
-          this.dateline = this.formatDate(res.dateline);
+          //this.dateline = this.formatDate(res.dateline);
           this.currentPage = 1;
           this.numreplies = res.numreplies;
           // Pages
@@ -99,12 +99,21 @@ export class ThreadPage {
       );
   }
 
+  doNextPage(tid, page){
+    page = parseInt(page)+1;
+    if(page <= this.pageCount){
+      this.doInfinite(tid, page);
+      this.slides.slideTo(page);
+      this.content.scrollToTop();
+    }
+  }
+
   doInfinite(tid, page) {
-    //
+    // Save var
     this.currentPage = page;
     // Reset prev info
     this.uids = [];
-    //
+    // API call
     this.apiv1.getThreadPage(tid, page).then(
       (res) => {
         this.threadtitle = res.subject;
@@ -404,7 +413,6 @@ export class ThreadPage {
   //
   private formatDate(input){
     var example = new Date(input);
-    console.log("date time: "+example);
     var date = example.toDateString();
     var timeOptions = {
       timeZone: 'UTC',
