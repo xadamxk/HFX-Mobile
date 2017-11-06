@@ -99,7 +99,7 @@ export class ForumPage {
   
       console.log('Page ' + this.page + ' loaded.');
       infiniteScroll.complete();
-    }, 1000);
+    }, 500);
   }
 
   launchProfilePage(forum){

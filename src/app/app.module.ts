@@ -17,6 +17,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { SettingsPage } from '../pages/settings/settings';
 import { ThreadlistPage } from '../pages/threadlist/threadlist';
 import { ThreadPage } from '../pages/thread/thread';
+import { MessageBoxPage } from '../pages/message-box/message-box';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -46,7 +47,8 @@ import { LongPressModule } from 'ionic-long-press'; // https://www.npmjs.com/pac
     ProfilePage,
     SettingsPage,
     ThreadlistPage,
-    ThreadPage
+    ThreadPage,
+    MessageBoxPage
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,8 @@ import { LongPressModule } from 'ionic-long-press'; // https://www.npmjs.com/pac
     ProfilePage,
     SettingsPage,
     ThreadlistPage,
-    ThreadPage
+    ThreadPage,
+    MessageBoxPage
   ],
   providers: [
     StatusBar,

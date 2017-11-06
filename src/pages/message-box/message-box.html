@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color="hfBlue">
+    <ion-title>{{ boxName }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-row text-center class="messageIconsPrompt">
+      <ion-col><ion-icon name='mail'></ion-icon></ion-col>
+      <ion-col><ion-icon name='mail-open'></ion-icon></ion-col>
+      <ion-col><ion-icon name='filing'></ion-icon></ion-col>
+    </ion-row>
+    <ion-row text-center>
+      <ion-col>Unread</ion-col>
+      <ion-col>Read</ion-col>
+      <ion-col>Replied</ion-col>
+    </ion-row>
+  <ion-list padding>
+    <ion-item *ngIf="totalPages < 1" text-center>
+      <h2>(No Messages)</h2>
+    </ion-item>
+    <ion-item *ngFor="let pm of pms">
+      <ion-thumbnail item-start>
+        <ion-icon name='mail' *ngIf="pm.status == 0" class="messageIcons"></ion-icon>
+        <ion-icon name='mail-open' *ngIf="pm.status == 1" class="messageIcons"></ion-icon>
+        <ion-icon name='help' *ngIf="pm.status == 2" class="messageIcons"></ion-icon>
+        <ion-icon name='filing' *ngIf="pm.status == 3" class="messageIcons"></ion-icon>
+      </ion-thumbnail>
+      <h2 class="normalWhiteSpace">{{ pm.subject }}</h2>
+      <h3 class="normalWhiteSpace"> {{ pm.senderusername }} </h3>
+      <p class="normalWhiteSpace"> {{ pm.dateline }} </p>
+    </ion-item>
+  </ion-list>
+  <ion-infinite-scroll *ngIf="loadedPages < totalPages" (ionInfinite)="doInfinite($event)">
+      <div class="center">Pull to load more messages...</div>
+      <ion-infinite-scroll-content loadingSpinner="circles" loadingText="Loading more threads..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

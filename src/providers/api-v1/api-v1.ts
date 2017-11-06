@@ -252,6 +252,60 @@ export class ApIv1Provider {
   }
 
   /**
+   * Gets authentcatied users inbox and structures object based on Inbox class for reference.
+   * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
+   */
+  getInboxPage(page: string) : Promise<Inbox> {
+    return new Promise((resolve,reject) => {
+      this.getRequest('/inbox&page=' + page).subscribe(
+        (res) => {
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
+
+    /**
+   * Gets authentcatied users pm box and structures object based on Inbox class for reference.
+   * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
+   */
+  getPMBox(index: string) : Promise<Inbox> {
+    return new Promise((resolve,reject) => {
+      this.getRequest('/pmbox/'+index).subscribe(
+        (res) => {
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
+
+      /**
+   * Gets authentcatied users pm box and structures object based on Inbox class for reference.
+   * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
+   */
+  getPMBoxPage(index: string, page: number) : Promise<Inbox> {
+    return new Promise((resolve,reject) => {
+      this.getRequest('/pmbox/'+index+'&page='+ page).subscribe(
+        (res) => {
+          if (!res.success){
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
+
+  /**
    * Gets user by uid and structures object based on User class for reference.
    * @return {Promise<User>} Use User object as reference. Reject is simply a string
    */
@@ -469,5 +523,6 @@ export class ApIv1Provider {
       );
     });
   }
+
 
 }
