@@ -20,16 +20,16 @@
     <ion-item *ngIf="totalPages < 1" text-center>
       <h2>(No Messages)</h2>
     </ion-item>
-    <ion-item *ngFor="let pm of pms">
-      <ion-thumbnail item-start>
+    <ion-item *ngFor="let pm of pmsArray">
+      <ion-thumbnail item-start (tap)="launchMessagePage(pm)">
         <ion-icon name='mail' *ngIf="pm.status == 0" class="messageIcons"></ion-icon>
         <ion-icon name='mail-open' *ngIf="pm.status == 1" class="messageIcons"></ion-icon>
         <ion-icon name='help' *ngIf="pm.status == 2" class="messageIcons"></ion-icon>
         <ion-icon name='filing' *ngIf="pm.status == 3" class="messageIcons"></ion-icon>
       </ion-thumbnail>
-      <h2 class="normalWhiteSpace">{{ pm.subject }}</h2>
-      <h3 class="normalWhiteSpace"> {{ pm.senderusername }} </h3>
-      <p class="normalWhiteSpace"> {{ pm.dateline }} </p>
+      <h2 (tap)="launchMessagePage(pm)" class="normalWhiteSpace">{{ pm.subject }}</h2>
+      <h3 (tap)="launchProfilePage(pm)" class="normalWhiteSpace"> {{ pm.senderusername }} </h3>
+      <p class="normalWhiteSpace"> {{ formatDate(pm.dateline) }} </p>
     </ion-item>
   </ion-list>
   <ion-infinite-scroll *ngIf="loadedPages < totalPages" (ionInfinite)="doInfinite($event)">

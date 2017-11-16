@@ -1,11 +1,20 @@
 <ion-header>
   <ion-navbar color="hfBlue">
-    <ion-title>settings</ion-title>
+    <ion-title>Settings</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content padding class="backgroundWithCards">
+  <ion-item>
+    <ion-label stacked>API Key</ion-label>
+    <ion-input type="text" [(ngModel)]="qrData"></ion-input>
+  </ion-item>
+    <button class="postButtons qrButton" (tap)="scanCode()">
+      <ion-icon name="qr-scanner"> Scan QR Code</ion-icon>
+    </button>
+  <h1>
+    <button class="postButtons" ion-button full round (tap)="saveChanges()">Save Changes</button>
+  </h1>
 </ion-content>

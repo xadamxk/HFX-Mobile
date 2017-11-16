@@ -25,6 +25,9 @@
               </h2>
             </div>
             <h2 class="normalWhiteSpace">{{ group.result.description }}</h2>
+            <div *ngIf="group.result.owner">
+                <b>Owner:</b> {{group.result.owner.username}}
+            </div>
       </ion-item>
     </ion-list>
   <!-- Site Groups -->

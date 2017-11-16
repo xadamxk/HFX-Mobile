@@ -151,6 +151,8 @@ class Thread {
   }]
 }
 
+
+
 @Injectable()
 export class ApIv1Provider {
 
@@ -160,9 +162,13 @@ export class ApIv1Provider {
   public headers: Headers;
   public options: RequestOptions;
 
+  private STORAGE_KEY = 'apiKey';
+  private key: string = '';
+
   constructor(
-    public http: Http, 
-    public alertCtrl: AlertController) {
+    public http: Http,
+    public alertCtrl: AlertController,
+    private storage: Storage) {
     //console.log('Hello ApIv1Provider Provider');
     /*
       Typically you'd use a StorageProvider (LocalStorage) to keep the apikey for the user stored on there device for accessing later.
@@ -171,6 +177,12 @@ export class ApIv1Provider {
 
     let key = 'jnvoQiYBVHycI2FecJyMIyYr7HYR4nL7';
     this.setKey(key); //Set key.
+    /*
+    this.getKey().then(value => {
+      console.log(value); //returns your value.
+      this.setKey(value);
+    });
+    */
   }
 
   /**
@@ -178,18 +190,24 @@ export class ApIv1Provider {
    * @param  {string} key API Key provided by https://hackforums.net/apikey.php
    * @return
    */
-  setKey(key: string){
+  setKey(key: string) {
     this.apiKey = key;
     return this.setHeaders();
+  }
+
+  getKey(): any {
+    return this.storage.get("apiKey").then((val) => {
+      return val;
+    });
   }
 
   /**
    * Using setHeaders method to add all headers dynamically to requests.
    * @return {Promise}
    */
-  setHeaders() : Promise<boolean> {
+  setHeaders(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      let apiKeyEncoded = window.btoa(this.apiKey+":");
+      let apiKeyEncoded = window.btoa(this.apiKey + ":");
       this.headers = new Headers({
         'Authorization': 'Basic ' + apiKeyEncoded
       });
@@ -198,33 +216,33 @@ export class ApIv1Provider {
     });
   }
 
-  getRequest(url: string) : any {
+  getRequest(url: string): any {
     return this.http.get(this.apiUrl + url, this.options)
-    .map(res => {
-      var jsonObj = res.json();
-      var limitKeyName = "x-rate-limit-remaining";
-      // Append result if not exist
-      if(!jsonObj.result){
-        jsonObj['result'] = [];
-      }
-      // Append keylimit if not exist
-      if(!jsonObj.result[limitKeyName]){
-        jsonObj.result[limitKeyName] = res.headers.toJSON()[limitKeyName];
-      }
-      // For le debugz
-      console.log('URL: ' + this.apiUrl + url + "\n" + 
-      "Remaining Calls: "+jsonObj.result[limitKeyName]);
-      return jsonObj;
-    }); 
+      .map(res => {
+        var jsonObj = res.json();
+        var limitKeyName = "x-rate-limit-remaining";
+        // Append result if not exist
+        if (!jsonObj.result) {
+          jsonObj['result'] = [];
+        }
+        // Append keylimit if not exist
+        if (!jsonObj.result[limitKeyName]) {
+          jsonObj.result[limitKeyName] = res.headers.toJSON()[limitKeyName];
+        }
+        // For le debugz
+        console.log('URL: ' + this.apiUrl + url + "\n" +
+          "Remaining Calls: " + jsonObj.result[limitKeyName]);
+        return jsonObj;
+      });
   }
 
-  postRequest(url: string, data: any) : any {
+  postRequest(url: string, data: any): any {
     console.log('url: ' + url);
     return this.http.post(this.apiUrl + url, data, this.options)
-    .map(res => res.json());
+      .map(res => res.json());
   }
 
-  displayErrorMessage(error){
+  displayErrorMessage(error) {
     const alert = this.alertCtrl.create({
       title: 'An Error Occured',
       subTitle: error,
@@ -237,11 +255,11 @@ export class ApIv1Provider {
    * Gets authentcatied users inbox and structures object based on Inbox class for reference.
    * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
    */
-  getInbox() : Promise<Inbox> {
-    return new Promise((resolve,reject) => {
+  getInbox(): Promise<Inbox> {
+    return new Promise((resolve, reject) => {
       this.getRequest('/inbox').subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -255,11 +273,11 @@ export class ApIv1Provider {
    * Gets authentcatied users inbox and structures object based on Inbox class for reference.
    * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
    */
-  getInboxPage(page: string) : Promise<Inbox> {
-    return new Promise((resolve,reject) => {
+  getInboxPage(page: string): Promise<Inbox> {
+    return new Promise((resolve, reject) => {
       this.getRequest('/inbox&page=' + page).subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -269,15 +287,15 @@ export class ApIv1Provider {
     });
   }
 
-    /**
-   * Gets authentcatied users pm box and structures object based on Inbox class for reference.
-   * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
-   */
-  getPMBox(index: string) : Promise<Inbox> {
-    return new Promise((resolve,reject) => {
-      this.getRequest('/pmbox/'+index).subscribe(
+  /**
+ * Gets authentcatied users pm box and structures object based on Inbox class for reference.
+ * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
+ */
+  getPMBox(index: string): Promise<Inbox> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/pmbox/' + index).subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -287,15 +305,33 @@ export class ApIv1Provider {
     });
   }
 
-      /**
-   * Gets authentcatied users pm box and structures object based on Inbox class for reference.
-   * @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
-   */
-  getPMBoxPage(index: string, page: number) : Promise<Inbox> {
-    return new Promise((resolve,reject) => {
-      this.getRequest('/pmbox/'+index+'&page='+ page).subscribe(
+  /**
+* Gets authentcatied users pm box and structures object based on Inbox class for reference.
+* @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
+*/
+  getPMBoxPage(index: string, page: number): Promise<Inbox> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/pmbox/' + index + '&page=' + page).subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
+            reject(res.message);
+          }
+
+          resolve(res.result);
+        }
+      );
+    });
+  }
+
+  /**
+* Gets authentcatied users message and structures object based on Inbox class for reference.
+* @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
+*/
+  getMessage(index: string): Promise<Inbox> {
+    return new Promise((resolve, reject) => {
+      this.getRequest('/pm/' + index).subscribe(
+        (res) => {
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -309,12 +345,12 @@ export class ApIv1Provider {
    * Gets user by uid and structures object based on User class for reference.
    * @return {Promise<User>} Use User object as reference. Reject is simply a string
    */
-  getUser(uid: number) : Promise<User> {
+  getUser(uid: number): Promise<User> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/user/'+uid).subscribe(
+      this.getRequest('/user/' + uid).subscribe(
         (res) => {
           console.log(res);
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -324,16 +360,16 @@ export class ApIv1Provider {
     });
   }
 
-   /**
-   * Gets users by uids and structures object based on Users class for reference.
-   * @return {Promise<Users>} Use Users object as reference. Reject is simply a string
-   */
-  getUsers(uids: number[]) : Promise<Users> {
+  /**
+  * Gets users by uids and structures object based on Users class for reference.
+  * @return {Promise<Users>} Use Users object as reference. Reject is simply a string
+  */
+  getUsers(uids: number[]): Promise<Users> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/users/'+uids.join()).subscribe(
+      this.getRequest('/users/' + uids.join()).subscribe(
         (res) => {
           console.log(res);
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -347,11 +383,11 @@ export class ApIv1Provider {
    * Gets categories and structures object based on 
    * @return {Promise<Category>}
    */
-  getCategories() : Promise<Category> {
+  getCategories(): Promise<Category> {
     return new Promise((resolve, reject) => {
       this.getRequest('/category').subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -365,11 +401,11 @@ export class ApIv1Provider {
    * Gets categories and structures object based on 
    * @return {Promise<Category>}
    */
-  getCategory(fid: string) : Promise<Category> {
+  getCategory(fid: string): Promise<Category> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/category/'+ fid).subscribe(
+      this.getRequest('/category/' + fid).subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -383,11 +419,11 @@ export class ApIv1Provider {
    * Gets categories and structures object based on 
    * @return {Promise<Forum>}
    */
-  getForum(fid: string) : Promise<Forum> {
+  getForum(fid: string): Promise<Forum> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/forum/'+ fid).subscribe(
+      this.getRequest('/forum/' + fid).subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -400,11 +436,11 @@ export class ApIv1Provider {
    * Gets categories and structures object based on 
    * @return {Promise<Forum>}
    */
-  getForumPage(fid: string, page: number) : Promise<Forum> {
+  getForumPage(fid: string, page: number): Promise<Forum> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/forum/'+ fid + '&page='+ page).subscribe(
+      this.getRequest('/forum/' + fid + '&page=' + page).subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -413,16 +449,16 @@ export class ApIv1Provider {
       );
     });
   }
-  
+
   /**
    * Gets categories and structures object based on 
    * @return {Promise<Groups>}
    */
-  getGroups() : Promise<Groups> {
+  getGroups(): Promise<Groups> {
     return new Promise((resolve, reject) => {
       this.getRequest('/groups').subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -436,11 +472,11 @@ export class ApIv1Provider {
    * Gets user by uid and structures object based on User class for reference.
    * @return {Promise<User>} Use User object as reference. Reject is simply a string
    */
-  getUserSelf() : Promise<User> {
+  getUserSelf(): Promise<User> {
     return new Promise((resolve, reject) => {
       this.getRequest('/user').subscribe(
         (res) => {
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -454,12 +490,12 @@ export class ApIv1Provider {
    * Gets user by uid and structures object based on User class for reference.
    * @return {Promise<Threadlist>} Use User object as reference. Reject is simply a string
    */
-  getUserThreads(uid: string) : Promise<Threadlist> {
+  getUserThreads(uid: string): Promise<Threadlist> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/user/'+uid+'/threads').subscribe(
+      this.getRequest('/user/' + uid + '/threads').subscribe(
         (res) => {
           console.log(res);
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -473,12 +509,12 @@ export class ApIv1Provider {
    * Gets thread by tid and structures object based on User class for reference.
    * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
    */
-  getThread(tid: string) : Promise<Thread> {
+  getThread(tid: string): Promise<Thread> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/thread/'+tid).subscribe(
+      this.getRequest('/thread/' + tid).subscribe(
         (res) => {
           console.log(res);
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -487,16 +523,16 @@ export class ApIv1Provider {
       );
     });
   }
-    /**
-   * Gets thread by tid and structures object based on User class for reference.
-   * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
-   */
-  getThreadPage(tid: string, page: number) : Promise<Thread> {
+  /**
+ * Gets thread by tid and structures object based on User class for reference.
+ * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
+ */
+  getThreadPage(tid: string, page: number): Promise<Thread> {
     return new Promise((resolve, reject) => {
-      this.getRequest('/thread/'+tid + '&page=' + page).subscribe(
+      this.getRequest('/thread/' + tid + '&page=' + page).subscribe(
         (res) => {
           console.log(res);
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
 
@@ -510,12 +546,12 @@ export class ApIv1Provider {
    * Gets thread by tid and structures object based on User class for reference.
    * @return {Promise<Thread>} Use Thread object as reference. Reject is simply a string
    */
-  getThreadRaw(tid: string) : Promise<Thread> {
+  getThreadRaw(tid: string): Promise<Thread> {
     return new Promise((resolve, reject) => {
       this.getRequest('/thread/' + tid + '?raw').subscribe(
         (res) => {
           console.log(res);
-          if (!res.success){
+          if (!res.success) {
             reject(res.message);
           }
           resolve(res.result);

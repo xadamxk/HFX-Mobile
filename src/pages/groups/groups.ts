@@ -19,7 +19,7 @@ export class GroupsPage {
     public apiv1: ApIv1Provider) {
     apiv1.getGroups().then(
       (res) => {
-        //console.log(res);
+        console.log(res);
         this.groups = res.groups;
 
         for (var i=0; i < this.groups.length; i++) { 

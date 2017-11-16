@@ -103,8 +103,6 @@ export class ThreadPage {
     page = parseInt(page)+1;
     if(page <= this.pageCount){
       this.doInfinite(tid, page);
-      this.slides.slideTo(page);
-      this.content.scrollToTop();
     }
   }
 
@@ -131,7 +129,9 @@ export class ThreadPage {
         }
         // Inject UIDS properties into posts object
         this.getUIDSResponse(this.apiv1, res.postdata, this.uids);
-        
+        //
+        this.content.scrollToTop();
+        this.slides.slideTo(page-1);
       },
       (reject) => {
         console.error(reject);

@@ -63,6 +63,6 @@
       <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
     <key>NSCameraUsageDescription</key>
-    <string>The camera is used to scan QR codes.</string>
+    <string/>
   </dict>
 </plist>

@@ -48,6 +48,22 @@ module.exports = [
         "clobbers": [
             "cordova.plugins.clipboard"
         ]
+    },
+    {
+        "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
+        "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
+        "pluginId": "phonegap-plugin-barcodescanner",
+        "clobbers": [
+            "cordova.plugins.barcodeScanner"
+        ]
+    },
+    {
+        "id": "cordova-sqlite-storage.SQLitePlugin",
+        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+        "pluginId": "cordova-sqlite-storage",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -60,7 +76,9 @@ module.exports.metadata =
     "ionic-plugin-keyboard": "2.2.1",
     "cordova-plugin-swift-support": "3.1.1",
     "cordova-plugin-qrscanner": "2.5.0",
-    "cordova-clipboard": "1.1.0"
+    "cordova-clipboard": "1.1.0",
+    "phonegap-plugin-barcodescanner": "7.0.0",
+    "cordova-sqlite-storage": "2.1.2"
 };
 // BOTTOM OF METADATA
 });

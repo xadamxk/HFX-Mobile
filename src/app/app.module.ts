@@ -18,6 +18,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { ThreadlistPage } from '../pages/threadlist/threadlist';
 import { ThreadPage } from '../pages/thread/thread';
 import { MessageBoxPage } from '../pages/message-box/message-box';
+import { MessagePage } from '../pages/message/message';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -28,10 +29,15 @@ import { GetForumProvider } from '../providers/get-forum/get-forum';
 import { GetCategoryProvider } from '../providers/get-category/get-category';
 import { GetGroupsProvider } from '../providers/get-groups/get-groups';
 import { ApIv1Provider } from '../providers/api-v1/api-v1';
-import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
+//import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Clipboard } from '@ionic-native/clipboard';
 import { LongPressModule } from 'ionic-long-press'; // https://www.npmjs.com/package/ionic-long-press
+// Barcode Scanner
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+// Storage
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -48,13 +54,16 @@ import { LongPressModule } from 'ionic-long-press'; // https://www.npmjs.com/pac
     SettingsPage,
     ThreadlistPage,
     ThreadPage,
-    MessageBoxPage
+    MessageBoxPage,
+    MessagePage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpModule,
-    LongPressModule
+    LongPressModule,
+    NgxQRCodeModule,
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -71,7 +80,8 @@ import { LongPressModule } from 'ionic-long-press'; // https://www.npmjs.com/pac
     SettingsPage,
     ThreadlistPage,
     ThreadPage,
-    MessageBoxPage
+    MessageBoxPage,
+    MessagePage
   ],
   providers: [
     StatusBar,
@@ -84,8 +94,9 @@ import { LongPressModule } from 'ionic-long-press'; // https://www.npmjs.com/pac
     GetCategoryProvider,
     GetGroupsProvider,
     ApIv1Provider,
-    QRScanner,
-    Clipboard
+    //QRScanner,
+    Clipboard,
+    BarcodeScanner
   ]
 })
 export class AppModule {}
