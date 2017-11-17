@@ -53,7 +53,10 @@ $colors: (
   black:    black,
   quoteGreen: #B1D8BF,
   quoteRed:   #CC3636,
-  quoteOlive: #ADB1A1
+  quoteOlive: #ADB1A1,
+  messageRec: #AAA3A3,
+  messageSen: #A3AAA3,
+  messageNew: #E3A3A3,
 );
 
 $tabs-tab-color-active: color($colors, light);

@@ -49,6 +49,17 @@ class Inbox {
   }]
 }
 
+class Message {
+  dateline: string;
+  folder: number;
+  from: number;
+  fromusername: string;
+  message: string;
+  subject: string;
+  to: number;
+  tousername: string;
+}
+
 class Category {
   name: string;
   description: string;
@@ -325,9 +336,9 @@ export class ApIv1Provider {
 
   /**
 * Gets authentcatied users message and structures object based on Inbox class for reference.
-* @return {Promise<Inbox>} Use Inbox object as reference. Reject is simply a string
+* @return {Promise<Message>} Use Inbox object as reference. Reject is simply a string
 */
-  getMessage(index: string): Promise<Inbox> {
+  getMessage(index: string): Promise<Message> {
     return new Promise((resolve, reject) => {
       this.getRequest('/pm/' + index).subscribe(
         (res) => {

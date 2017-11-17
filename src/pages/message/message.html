@@ -1,10 +1,36 @@
 <ion-header>
   <ion-navbar color="hfBlue">
-    <ion-title>Message</ion-title>
+    <ion-title>{{senderUsername}}
+      <br />
+      <span style="font-size: 1.5rem; padding:0px">{{messageSubject}}</span>
+      <!--
+      <br />
+      <span style="font-size: 1.5rem; padding:0px">{{formatDate(messageDate)}}</span>
+      -->
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-
+  <div *ngFor="let message of messageArray">
+    <div *ngIf="message[2] !==' ' && message[2] !==''">
+      <!-- Sender -->
+      <ion-card  *ngIf="message[0] == senderUsername" class="leftMessage message">
+        <!-- Username -->
+        <h2 (tap)="launchProfilePageSender(message)" class="normalWhiteSpace"><b>{{ message[0] }}</b></h2>
+        <hr>
+        <!-- Message -->
+        <p class="normalWhiteSpace" style="color: #333333;" [innerHtml]="assembleHTMLItem(message[2])"></p>
+      </ion-card>
+      <!-- Receiver -->
+      <ion-card *ngIf="message[0] == receiverUsername" class="rightMessage message">
+        <!-- Username -->
+        <h2 (tap)="launchProfilePageReceiver(message)" class="normalWhiteSpace"><b>{{ message[0] }}</b></h2>
+        <hr>
+        <!-- Message -->
+        <p class="normalWhiteSpace" style="color: #333333;" [innerHtml]="assembleHTMLItem(message[2])"></p>
+      </ion-card>
+    </div>
+  </div>
 </ion-content>
