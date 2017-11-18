@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar color="hfBlue">
+    <ion-title>Favorites</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="darkBackground">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list-header>
+    <h1>
+      <b>Forums</b>
+    </h1>
+  </ion-list-header>
+  <ion-list>
+    <ion-item *ngIf="favoritesEmpty" text-center>
+      <h2>(No Favorites)</h2>
+    </ion-item>
+    <div *ngFor="let forum of favoriteForums">
+      <ion-item-sliding>
+        <ion-item (tap)="launchForumPage(forum)">
+          <h2>{{forum[1]}}</h2>
+        </ion-item>
+        <ion-item-options>
+          <button class="removeFav" (click)="removeItem(favoriteForums, forum)">
+            <ion-icon name="trash"></ion-icon> Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+  </ion-list>
+</ion-content>

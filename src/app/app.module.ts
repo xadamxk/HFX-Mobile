@@ -19,6 +19,7 @@ import { ThreadlistPage } from '../pages/threadlist/threadlist';
 import { ThreadPage } from '../pages/thread/thread';
 import { MessageBoxPage } from '../pages/message-box/message-box';
 import { MessagePage } from '../pages/message/message';
+import { FavoritesPage } from '../pages/favorites/favorites';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -55,7 +56,8 @@ import { IonicStorageModule } from '@ionic/storage';
     ThreadlistPage,
     ThreadPage,
     MessageBoxPage,
-    MessagePage
+    MessagePage,
+    FavoritesPage
   ],
   imports: [
     BrowserModule,
@@ -81,7 +83,8 @@ import { IonicStorageModule } from '@ionic/storage';
     ThreadlistPage,
     ThreadPage,
     MessageBoxPage,
-    MessagePage
+    MessagePage,
+    FavoritesPage
   ],
   providers: [
     StatusBar,

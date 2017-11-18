@@ -180,20 +180,13 @@ export class ApIv1Provider {
     public http: Http,
     public alertCtrl: AlertController,
     private storage: Storage) {
-    //console.log('Hello ApIv1Provider Provider');
     /*
       Typically you'd use a StorageProvider (LocalStorage) to keep the apikey for the user stored on there device for accessing later.
       However in this example I have embeded the key in a variable above, and added the setKey method.
      */
 
     let key = 'jnvoQiYBVHycI2FecJyMIyYr7HYR4nL7';
-    this.setKey(key); //Set key.
-    /*
-    this.getKey().then(value => {
-      console.log(value); //returns your value.
-      this.setKey(value);
-    });
-    */
+    this.setKey(key);
   }
 
   /**
@@ -201,15 +194,16 @@ export class ApIv1Provider {
    * @param  {string} key API Key provided by https://hackforums.net/apikey.php
    * @return
    */
+
+
   setKey(key: string) {
+    console.log('setKey value: ' + key);
     this.apiKey = key;
     return this.setHeaders();
   }
 
-  getKey(): any {
-    return this.storage.get("apiKey").then((val) => {
-      return val;
-    });
+  getKey(storageKey: string): Promise<string> {
+    return this.storage.get(storageKey);
   }
 
   /**

@@ -202,3 +202,14 @@ blockquote{
     background-color: color($colors, messageSen);
     float: right;
 }
+
+.favoriteIcon{
+    color: color($colors, favHeart);
+}
+
+.removeFav{
+    background-color: color($colors, danger);
+    color: color($colors, light);
+    font-size: 16px;
+    border-radius: 0px;
+}
