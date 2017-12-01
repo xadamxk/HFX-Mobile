@@ -8,32 +8,32 @@
     </ion-buttons>
   </ion-navbar>
 
-  <ion-row class="filters segmentPager" >
+  <ion-row class="filters segmentPager">
     <!-- Prev Page -->
-    <ion-col class="col-with-arrow leftrightBorder" (tap)="slidePrev()" ion-long-press [interval]="500" 
-    (onPressing)="leftPageHold()"  no-padding col-1>
+    <ion-col class="col-with-arrow leftrightBorder" (tap)="slidePrev()" ion-long-press [interval]="500" (onPressing)="leftPageHold()"
+      no-padding col-1>
       <ion-icon *ngIf="showLeftButton" name="arrow-back"></ion-icon>
     </ion-col>
     <ion-col no-padding col-10>
-        <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="3" autoHeight>
-          <!-- Last Page -->
-          <ion-slide (tap)="doInfinite(threadID, pageCount)" class="leftrightBorder">
-            <p>Last</p>
-          </ion-slide>
-          <!-- Thread Pages -->
-          <ion-slide (tap)="doInfinite(threadID, page)" *ngFor="let page of pages" class="leftrightBorder">
-            <p *ngIf="page !== currentPage" >{{ page }}</p>
-            <p *ngIf="page == currentPage" class="selectedPage">{{ page }}</p>
-          </ion-slide>
-          <!-- First Page -->
-          <ion-slide (tap)="doInfinite(threadID, 1)" class="leftrightBorder">
-            <p>First</p>
-          </ion-slide>
-        </ion-slides>
+      <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="3" autoHeight>
+        <!-- Last Page -->
+        <ion-slide (tap)="doInfinite(threadID, pageCount)" class="leftrightBorder">
+          <p>Last</p>
+        </ion-slide>
+        <!-- Thread Pages -->
+        <ion-slide (tap)="doInfinite(threadID, page)" *ngFor="let page of pages" class="leftrightBorder">
+          <p *ngIf="page !== currentPage">{{ page }}</p>
+          <p *ngIf="page == currentPage" class="selectedPage">{{ page }}</p>
+        </ion-slide>
+        <!-- First Page -->
+        <ion-slide (tap)="doInfinite(threadID, 1)" class="leftrightBorder">
+          <p>First</p>
+        </ion-slide>
+      </ion-slides>
     </ion-col>
     <!-- Next Page -->
-    <ion-col class="col-with-arrow leftrightBorder" (tap)="slideNext()" ion-long-press [interval]="500" 
-    (onPressing)="rightPageHold()" no-padding col-1>
+    <ion-col class="col-with-arrow leftrightBorder" (tap)="slideNext()" ion-long-press [interval]="500" (onPressing)="rightPageHold()"
+      no-padding col-1>
       <ion-icon *ngIf="showRightButton" name="arrow-forward"></ion-icon>
     </ion-col>
   </ion-row>
@@ -41,7 +41,7 @@
 
 
 <ion-content class="backgroundWithCards">
-  <!---->
+  <!-- Thread title -->
   <ion-card class="headerCard">
     <ion-card-content class="headerCardContent center">
       <h1>
@@ -52,12 +52,19 @@
       <div class="closed" *ngIf="threadclosed"> Closed </div>
     </ion-card-content>
   </ion-card>
+  <!-- Posts -->
   <ion-card *ngFor="let post of posts; let i = index">
-    <ion-row style="border-bottom:1px solid black;">
+    <!-- Post Date/Number -->
+    <ion-row>
       <ion-col text-left>{{formatDate(post.dateline)}}</ion-col>
       <ion-col text-right>Post #{{calcPostNum(i)}}</ion-col>
     </ion-row>
-    <ion-item>
+    <!-- Edit Time -->
+    <ion-row *ngIf="post.edittime !== '1969-12-31T19:00:00Z'">
+      <ion-col text-left>{{formatDate(post.edittime)}} (Edited)</ion-col>
+    </ion-row>
+    <!-- Post Author Info -->
+    <ion-item style="border-top:1px solid black;">
       <ion-thumbnail (tap)="launchProfilePage(post)" item-left>
         <img class="avatarThumbnails" src="{{ pathForImages(post) }}" />
       </ion-thumbnail>
@@ -72,9 +79,11 @@
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-item>
+    <!-- Post Body -->
     <ion-card-content class="messageDivider">
       <div class="newLineText" [innerHtml]="assembleHTMLItem(post.message)"></div>
     </ion-card-content>
+    <!-- Post Buttons -->
     <ion-row>
       <ion-col>
         <button class="postButtons" ion-button icon-left>
@@ -94,11 +103,11 @@
     </ion-row>
   </ion-card>
 </ion-content>
-
+<!-- FAB Button -->
 <ion-footer>
-    <ion-fab right bottom>
-        <button (tap)="doNextPage(threadID, currentPage)" ion-fab mini class="postButtons">
-          <ion-icon name="arrow-dropright"></ion-icon>
-        </button>
-      </ion-fab>
-  </ion-footer>
+  <ion-fab right bottom>
+    <button (tap)="doNextPage(threadID, currentPage)" ion-fab mini class="postButtons">
+      <ion-icon name="arrow-dropright"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-footer>

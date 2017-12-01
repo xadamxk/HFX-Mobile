@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ForumPage } from '../forum/forum';
+import { ForumPage } from '../../pages/forum/forum';
 import { Storage } from '@ionic/storage';
 
 @IonicPage()

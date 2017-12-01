@@ -171,4 +171,46 @@ export class ForumPage {
     return string.substring(1, string.length - 1);
   }
 
+  private formatDate(input) {
+    var example = new Date(input);
+    // Date
+    var date = example.toDateString();
+    // Time
+    var timeOptions = {
+      timeZone: 'UTC',
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+    // Time
+    example.setHours(example.getHours()-1);
+    var time = example.toLocaleString('en-US', timeOptions);
+    var finalFormat = date + ', ' + time;
+    return finalFormat;
+  }
+
+  private timeSince(input) {
+    var example = new Date(input);
+    var now = new Date();
+    // Local Time Difference
+    var isoDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    // Time Diff to seconds
+    var secondsPast = ((isoDate.getTime() - example.getTime()) / 1000) + 3600;
+    // Switch
+    if (secondsPast < 60) {
+      return Math.floor(secondsPast) + 's';
+    }
+    if (secondsPast < 3600) {
+      return Math.floor(secondsPast / 60) + 'm';
+    }
+    if (secondsPast <= 86400) {
+      return Math.floor(secondsPast / 3600) + 'h';
+    }
+    if (secondsPast > 86400) {
+      let day = example.getDate();
+      let month = example.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ", "");
+      let year = example.getFullYear() == now.getFullYear() ? "" : " " + example.getFullYear();
+      return month + " " + day + year;
+    }
+  }
+
 }

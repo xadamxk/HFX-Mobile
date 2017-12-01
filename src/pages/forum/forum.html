@@ -38,6 +38,10 @@
           {{ thread.numreplies }}
         </h4>
       </div>
+      <div class="item row">
+        <ion-col text-left>{{formatDate(thread.dateline)}}</ion-col>
+        <ion-col text-right>Last Post: {{timeSince(thread.lastpost)}} ago</ion-col>
+      </div>
     </ion-card-content>
   </ion-card>
   <!-- Normal Threads -->
@@ -63,6 +67,10 @@
           <ion-icon name="chatboxes"></ion-icon>
           {{ thread.numreplies }}
         </h4>
+      </div>
+      <div class="item row">
+        <ion-col text-left>{{formatDate(thread.dateline)}}</ion-col>
+        <ion-col text-right>Last Post: {{timeSince(thread.lastpost)}} ago</ion-col>
       </div>
     </ion-card-content>
   </ion-card>
