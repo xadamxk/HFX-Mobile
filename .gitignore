@@ -11,9 +11,8 @@ log.txt
 *.sublime-workspace
 .vscode/
 npm-debug.log*
-
 www/
-platforms/
+platforms/ios/
 $RECYCLE.BIN/
 
 .DS_Store

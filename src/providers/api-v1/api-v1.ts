@@ -168,7 +168,7 @@ class Thread {
 export class ApIv1Provider {
 
   private apiUrl: string = 'https://hackforums.net/api/v1';
-  private apiKey: string = ''; //set default key or call set key method.
+  //private apiKey; //set default key or call set key method.
 
   public headers: Headers;
   public options: RequestOptions;
@@ -179,14 +179,12 @@ export class ApIv1Provider {
   constructor(
     public http: Http,
     public alertCtrl: AlertController,
-    private storage: Storage) {
-    /*
-      Typically you'd use a StorageProvider (LocalStorage) to keep the apikey for the user stored on there device for accessing later.
-      However in this example I have embeded the key in a variable above, and added the setKey method.
-     */
-
-    let key = 'jnvoQiYBVHycI2FecJyMIyYr7HYR4nL7';
-    this.setKey(key);
+    public storage: Storage) {
+      this.setHeaders = this.setHeaders.bind(this);
+      this.getRequest = this.getRequest.bind(this);
+      this.postRequest = this.postRequest.bind(this);
+      //let key = 'jnvoQiYBVHycI2FecJyMIyYr7HYR4nL7';
+      //this.setKey();
   }
 
   /**
@@ -194,13 +192,9 @@ export class ApIv1Provider {
    * @param  {string} key API Key provided by https://hackforums.net/apikey.php
    * @return
    */
-
-
-  setKey(key: string) {
-    console.log('setKey value: ' + key);
-    this.apiKey = key;
-    return this.setHeaders();
-  }
+  setKey(keyProp) {
+    return this.storage.get(keyProp);
+}
 
   getKey(storageKey: string): Promise<string> {
     return this.storage.get(storageKey);
@@ -210,41 +204,50 @@ export class ApIv1Provider {
    * Using setHeaders method to add all headers dynamically to requests.
    * @return {Promise}
    */
-  setHeaders(): Promise<boolean> {
+  setHeaders(apiKey): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      let apiKeyEncoded = window.btoa(this.apiKey + ":");
+      let apiKeyEncoded = window.btoa(apiKey + ":");
       this.headers = new Headers({
-        'Authorization': 'Basic ' + apiKeyEncoded
+      'Authorization': 'Basic ' + apiKeyEncoded
       });
       this.options = new RequestOptions({ headers: this.headers });
       resolve(true); //Finished setting variables
-    });
+  });
   }
 
   getRequest(url: string): any {
-    return this.http.get(this.apiUrl + url, this.options)
-      .map(res => {
-        var jsonObj = res.json();
-        var limitKeyName = "x-rate-limit-remaining";
-        // Append result if not exist
-        if (!jsonObj.result) {
-          jsonObj['result'] = [];
-        }
-        // Append keylimit if not exist
-        if (!jsonObj.result[limitKeyName]) {
-          jsonObj.result[limitKeyName] = res.headers.toJSON()[limitKeyName];
-        }
-        // For le debugz
-        console.log('URL: ' + this.apiUrl + url + "\n" +
-          "Remaining Calls: " + jsonObj.result[limitKeyName]);
-        return jsonObj;
-      });
+    return this.setKey('apiKey')
+        .then(this.setHeaders)
+        .catch(err => console.log('handle errors for api key retrieval and setting headers here'))
+        .then(() => {
+            return this.http.get(this.apiUrl + url, this.options)
+                .map(res => {
+                var jsonObj = res.json();
+                var limitKeyName = "x-rate-limit-remaining";
+                // Append result if not exist
+                if (!jsonObj.result) {
+                    jsonObj['result'] = [];
+                }
+                // Append keylimit if not exist
+                if (!jsonObj.result[limitKeyName]) {
+                    jsonObj.result[limitKeyName] = res.headers.toJSON()[limitKeyName];
+                }
+                // For le debugz
+                console.log('URL: ' + this.apiUrl + url + "\n" +
+                    "Remaining Calls: " + jsonObj.result[limitKeyName]);
+                return jsonObj;
+                });
+        });
   }
 
   postRequest(url: string, data: any): any {
-    console.log('url: ' + url);
-    return this.http.post(this.apiUrl + url, data, this.options)
-      .map(res => res.json());
+    return this.setKey('apiKey')
+        .then(this.setHeaders)
+        .catch(err => console.log('handle errors for api key retrieval and setting headers here'))
+        .then(() => {
+            return this.http.post(this.apiUrl + url, data, this.options)
+                .map(res => res.json());
+        });
   }
 
   displayErrorMessage(error) {
