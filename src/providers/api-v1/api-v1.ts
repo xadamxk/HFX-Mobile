@@ -183,8 +183,14 @@ export class ApIv1Provider {
       this.setHeaders = this.setHeaders.bind(this);
       this.getRequest = this.getRequest.bind(this);
       this.postRequest = this.postRequest.bind(this);
+      this.initialize = this.initialize.bind(this);
       //let key = 'jnvoQiYBVHycI2FecJyMIyYr7HYR4nL7';
       //this.setKey();
+  }
+
+  initialize() {
+    return this.setKey('apiKey')
+      .then(this.setHeaders);
   }
 
   /**
@@ -194,7 +200,7 @@ export class ApIv1Provider {
    */
   setKey(keyProp) {
     return this.storage.get(keyProp);
-}
+  }
 
   getKey(storageKey: string): Promise<string> {
     return this.storage.get(storageKey);
@@ -208,7 +214,7 @@ export class ApIv1Provider {
     return new Promise((resolve, reject) => {
       let apiKeyEncoded = window.btoa(apiKey + ":");
       this.headers = new Headers({
-      'Authorization': 'Basic ' + apiKeyEncoded
+        'Authorization': 'Basic ' + apiKeyEncoded
       });
       this.options = new RequestOptions({ headers: this.headers });
       resolve(true); //Finished setting variables
@@ -216,28 +222,23 @@ export class ApIv1Provider {
   }
 
   getRequest(url: string): any {
-    return this.setKey('apiKey')
-        .then(this.setHeaders)
-        .catch(err => console.log('handle errors for api key retrieval and setting headers here'))
-        .then(() => {
-            return this.http.get(this.apiUrl + url, this.options)
-                .map(res => {
-                var jsonObj = res.json();
-                var limitKeyName = "x-rate-limit-remaining";
-                // Append result if not exist
-                if (!jsonObj.result) {
-                    jsonObj['result'] = [];
-                }
-                // Append keylimit if not exist
-                if (!jsonObj.result[limitKeyName]) {
-                    jsonObj.result[limitKeyName] = res.headers.toJSON()[limitKeyName];
-                }
-                // For le debugz
-                console.log('URL: ' + this.apiUrl + url + "\n" +
-                    "Remaining Calls: " + jsonObj.result[limitKeyName]);
-                return jsonObj;
-                });
-        });
+    return this.http.get(this.apiUrl + url, this.options)
+      .map(res => {
+      var jsonObj = res.json();
+      var limitKeyName = "x-rate-limit-remaining";
+      // Append result if not exist
+      if (!jsonObj.result) {
+          jsonObj['result'] = [];
+      }
+      // Append keylimit if not exist
+      if (!jsonObj.result[limitKeyName]) {
+          jsonObj.result[limitKeyName] = res.headers.toJSON()[limitKeyName];
+      }
+      // For le debugz
+      console.log('URL: ' + this.apiUrl + url + "\n" +
+          "Remaining Calls: " + jsonObj.result[limitKeyName]);
+      return jsonObj;
+      });
   }
 
   postRequest(url: string, data: any): any {

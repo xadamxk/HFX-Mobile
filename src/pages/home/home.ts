@@ -17,16 +17,19 @@ export class HomePage {
   constructor(
     public navCtrl: NavController, 
     public apiv1: ApIv1Provider) {
-    apiv1.getCategories().then(
-      (res) => {
-        console.log(res);
-        this.categories = res.children;
-      },
-      (reject) => {
-        console.error(reject);
-        apiv1.displayErrorMessage(reject);
-      }
-    );
+    apiv1.initialize()
+      .then(() => {
+        apiv1.getCategories().then(
+          (res) => {
+            console.log(res);
+            this.categories = res.children;
+          },
+          (reject) => {
+            console.error(reject);
+            apiv1.displayErrorMessage(reject);
+          }
+        );
+      })
   }
 
   launchCategoryPage(category){
